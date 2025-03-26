@@ -32,7 +32,7 @@
                 const barcodes = await barcodeDetector.detect(video);
                 if(barcodes.length > 0){
                     scanning = false;
-                    alert('Barcode: ${barcodes[0].rawValue}');
+                    alert('Barcode:' + barcodes[0].rawValue);
                     stopScanner();
                 }
             }
