@@ -3,7 +3,7 @@
     import { BarcodeDetector } from "barcode-detector";
 
     let video: HTMLVideoElement;
-    let stream: MediaProvider | null;
+    let stream: MediaStream | null;
     let scanning = false;
 
     // check compatibility
