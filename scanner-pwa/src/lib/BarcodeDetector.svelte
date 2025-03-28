@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-
+    import { BarcodeDetector } from "barcode-detector";
 
     let video: HTMLVideoElement;
     let stream: MediaProvider | null;
@@ -55,7 +55,7 @@
 </script>
 
 <div>
-    <video bind:this={video} autoplay playsinline></video>
+    <video bind:this={video} muted autoplay playsinline></video>
     <button on:click={startScanner}>Start</button>
     <button on:click={stopScanner}>Stop</button>
 </div>
