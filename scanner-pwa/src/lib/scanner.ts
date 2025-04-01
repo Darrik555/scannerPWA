@@ -1,4 +1,4 @@
-import { onDestroy } from "svelte";
+
 import { BarcodeDetector as BarcodePonyfill, type BarcodeFormat } from "barcode-detector/ponyfill";
 
 declare global {
@@ -66,5 +66,3 @@ export function stopScanner(){
     }
     scanning = false;
 }
-
-onDestroy(stopScanner);

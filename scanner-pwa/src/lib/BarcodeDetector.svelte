@@ -1,7 +1,9 @@
 <script lang="ts">
   import { scanBarcode, stopScanner } from "$lib/scanner";
-
+  import { onDestroy } from "svelte";
   let video: HTMLVideoElement;
+
+  onDestroy(stopScanner);
 </script>
 
 <div>
