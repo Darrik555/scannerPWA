@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { scanBarcode, stopScanner } from "$lib/scanner";
+  import { startScanner, stopScanner } from "$lib/scanner";
   import { onDestroy } from "svelte";
   let video: HTMLVideoElement;
 
@@ -8,7 +8,7 @@
 
 <div>
   <video bind:this={video} muted autoplay playsinline></video>
-  <button on:click={scanBarcode}>Start</button>
+  <button on:click={startScanner}>Start</button>
   <button on:click={stopScanner}>Stop</button>
 </div>
 
