@@ -22,6 +22,7 @@
 
 <div>
   <video bind:this={video} muted autoplay playsinline></video>
+  <input type="text" />
   <button on:click={startScanner}>Start</button>
   <button on:click={stopScanner}>Stop</button>
 </div>
