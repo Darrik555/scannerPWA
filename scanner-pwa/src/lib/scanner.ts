@@ -52,20 +52,26 @@ export const scanBarcode = async (video: HTMLVideoElement) => {
 
     barcodeDetector = await createBarcodeDetector();
     scanning = true
-    
+
     while(scanning){
         try{
             const barcodes = await barcodeDetector.detect(video);
             if(barcodes.length > 0){
                 scanning = false;
-                alert('Barcode:' + barcodes[0].rawValue);
                 stopScanner();
+                console.log("first format "+barcodes[0].format)
+                barcodes.forEach(element => {
+                    console.log("Value " + element.rawValue);    
+                });
+                
+                return barcodes[0].rawValue;
             }
         }
         catch(error){
             console.error('Error on Scanning',error);
         }
-        await new Promise(r => setTimeout(r, 500));
+        //await new Promise(r => setTimeout(r, 500));
+
     }
 }
 

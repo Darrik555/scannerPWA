@@ -7,13 +7,14 @@
   let isScanning = $state(false);
   let cameraActive = $state(false);
   let isMounted = $state(false);
+  let barcodeValue = $state();
 
   onMount(() => {
     isMounted = true;
 
     try {
       camaraController.start(video);
-      scanBarcode(video);
+      barcodeValue = scanBarcode(video);
     } catch (error) {
       console.log(error);
     }
@@ -26,9 +27,9 @@
 
 <div>
   <video bind:this={video} muted autoplay playsinline></video>
-  <input type="text" />
-  <button on:click={startScanner}>Start</button>
-  <button on:click={stopScanner}>Stop</button>
+  <input type="text" bind:value={barcodeValue} />
+  <button onclick={startScanner}>Start</button>
+  <button onclick={stopScanner}>Stop</button>
 </div>
 
 <style>
