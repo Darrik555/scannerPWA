@@ -9,14 +9,15 @@
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
+  function handleScanning() {
+    scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
+  }
+
   onMount(() => {
     isMounted = true;
 
     try {
       camaraController.start(video);
-      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-        scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
-      }
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +29,13 @@
 </script>
 
 <div>
-  <video bind:this={video} muted autoplay playsinline></video>
+  <video
+    bind:this={video}
+    onloadeddata={handleScanning}
+    muted
+    autoplay
+    playsinline
+  ></video>
   <input type="text" bind:value={barcodeValue} />
   <button onclick={startScanner}>Start</button>
   <button onclick={stopScanner}>Stop</button>
