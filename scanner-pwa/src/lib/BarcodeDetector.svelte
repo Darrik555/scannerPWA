@@ -14,9 +14,11 @@
 
     try {
       camaraController.start(video);
-      scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
+      if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
+      }
     } catch (error) {
-      console.log("TEST" + error);
+      console.log(error);
     }
   });
 
