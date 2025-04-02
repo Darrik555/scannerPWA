@@ -43,14 +43,12 @@ export async function startScanner(){
             scanning = true;
             scanBarcode(video)
         }catch(error){
-            console.error('Camera Error', error)
+            console.error('Error accessing the camera: ', error)
         }
-
-        
     }
 }
 
-async function scanBarcode(video: HTMLVideoElement) {
+export const scanBarcode = async (video: HTMLVideoElement) => {
     while(scanning){
         try{
             const barcodes = await barcodeDetector.detect(video);

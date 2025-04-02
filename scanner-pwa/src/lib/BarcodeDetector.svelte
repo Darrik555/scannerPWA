@@ -1,6 +1,22 @@
 <script lang="ts">
-  import { startScanner, stopScanner } from "$lib/scanner";
-  let video: HTMLVideoElement;
+  import { startScanner, scanBarcode, stopScanner } from "$lib/scanner";
+  import { onMount } from "svelte";
+  import * as camaraController from "$lib/camera";
+
+  let video: HTMLVideoElement = $props();
+  let isScanning = $state(false);
+  let cameraActive = $state(false);
+  let isMounted = $state(false);
+
+  onMount(() => {
+    isMounted = true;
+
+    try {
+      camaraController.start(video);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 </script>
 
 <div>
