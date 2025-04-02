@@ -34,7 +34,7 @@ async function createBarcodeDetector() {
 
 export async function startScanner(){
     
-    barcodeDetector = await createBarcodeDetector();
+
 
     async(video: HTMLVideoElement) => {
         try{
@@ -49,6 +49,10 @@ export async function startScanner(){
 }
 
 export const scanBarcode = async (video: HTMLVideoElement) => {
+
+    barcodeDetector = await createBarcodeDetector();
+    scanning = true
+    
     while(scanning){
         try{
             const barcodes = await barcodeDetector.detect(video);
