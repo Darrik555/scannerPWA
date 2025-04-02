@@ -16,7 +16,7 @@
       camaraController.start(video);
       scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
     } catch (error) {
-      console.log(error);
+      console.log("TEST" + error);
     }
   });
 
