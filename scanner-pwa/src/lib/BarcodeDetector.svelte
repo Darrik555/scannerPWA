@@ -17,7 +17,15 @@
     isMounted = true;
 
     try {
-      camaraController.start(video);
+      camaraController
+        .start(video)
+        .then((data) =>
+          console.log(
+            data.data.capabilities,
+            data.data.stream,
+            data.data.videoElement
+          )
+        );
     } catch (error) {
       console.log(error);
     }
