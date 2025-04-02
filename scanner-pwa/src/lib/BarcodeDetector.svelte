@@ -1,6 +1,6 @@
 <script lang="ts">
   import { startScanner, scanBarcode, stopScanner } from "$lib/scanner";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import * as camaraController from "$lib/camera";
 
   let video: HTMLVideoElement = $props();
@@ -17,6 +17,10 @@
     } catch (error) {
       console.log(error);
     }
+  });
+
+  onDestroy(() => {
+    stopScanner();
   });
 </script>
 
