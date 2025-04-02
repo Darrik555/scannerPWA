@@ -7,14 +7,14 @@
   let isScanning = $state(false);
   let cameraActive = $state(false);
   let isMounted = $state(false);
-  let barcodeValue = $state();
+  let barcodeValue: string = $state("");
 
   onMount(() => {
     isMounted = true;
 
     try {
       camaraController.start(video);
-      barcodeValue = scanBarcode(video);
+      scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
     } catch (error) {
       console.log(error);
     }

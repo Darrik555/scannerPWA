@@ -70,7 +70,7 @@ export async function scanBarcode(video: HTMLVideoElement) {
             catch(error){
                 console.error('Error on Scanning',error);
             }
-            //await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 500));
     
         }
     
