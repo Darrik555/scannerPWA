@@ -13,6 +13,7 @@
 
     try {
       camaraController.start(video);
+      scanBarcode(video);
     } catch (error) {
       console.log(error);
     }

@@ -24,7 +24,7 @@ async function createBarcodeDetector() {
 
     const allSupportedFormats = await window.BarcodeDetector.getSupportedFormats();
     const unsupportedFormats = format.formats.filter((format) => !allSupportedFormats.includes(format));
-    alert(unsupportedFormats);
+    //alert(unsupportedFormats);
 
 
     alert("Use Native Barcode Detector");
