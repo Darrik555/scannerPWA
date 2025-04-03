@@ -19,7 +19,7 @@
 
     try {
       camaraController.start(video).then((result) => {
-        video = result.data.videoElement;
+        //video = result.data.videoElement;
         stream = result.data.stream;
       });
     } catch (error) {

@@ -1,3 +1,6 @@
+
+let stream: MediaStream | null;
+
 export async function start(videoElement: HTMLVideoElement){
     // frameRate? frameRate: { ideal: 10, max: 15 }
     const constraints = {
@@ -19,16 +22,10 @@ export async function start(videoElement: HTMLVideoElement){
     return{data: {videoElement, stream, capabilities}};
 }
 
-export function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
-    if(!videoElement || !(videoElement instanceof HTMLVideoElement)){
-        console.log('stop errror');
-        return;
-    }
+export async function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
 
-    videoElement.pause();
-    videoElement.removeAttribute('srcObject');
-    videoElement.removeAttribute('src');
-    videoElement.load();
+	videoElement.src = '';
+	videoElement.srcObject = null;
 
     stream.getTracks().forEach(track => 
         {
