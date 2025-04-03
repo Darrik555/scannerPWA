@@ -20,7 +20,6 @@ export async function start(videoElement: HTMLVideoElement){
 }
 
 export function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
-    videoElement.pause();
     videoElement.removeAttribute('srcObject');
     videoElement.removeAttribute('src');
     videoElement.load();
