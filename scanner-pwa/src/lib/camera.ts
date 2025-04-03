@@ -20,12 +20,15 @@ export async function start(videoElement: HTMLVideoElement){
 }
 
 export function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
-    if(videoElement){
-        videoElement.pause();
-        videoElement.removeAttribute('srcObject');
-        videoElement.removeAttribute('src');
-        videoElement.load();
+    if(!videoElement || !(videoElement instanceof HTMLVideoElement)){
+        console.log('stop errror');
+        return;
     }
+
+    videoElement.pause();
+    videoElement.removeAttribute('srcObject');
+    videoElement.removeAttribute('src');
+    videoElement.load();
 
     stream.getTracks().forEach(track => 
         {
