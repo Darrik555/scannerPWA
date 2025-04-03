@@ -20,8 +20,9 @@ export async function start(videoElement: HTMLVideoElement){
 }
 
 export function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
-    videoElement.removeAttribute('srcObject');
-    videoElement.removeAttribute('src');
+
+    videoElement.src= '';
+    videoElement.srcObject = null;
     videoElement.load();
 
     stream.getTracks().forEach(track => 
