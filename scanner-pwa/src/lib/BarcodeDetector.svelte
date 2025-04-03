@@ -4,6 +4,7 @@
   import * as camaraController from "$lib/camera";
 
   let video: HTMLVideoElement = $props();
+  let stream: MediaStream;
   let isScanning = $state(false);
   let cameraActive = $state(false);
   let isMounted = $state(false);
@@ -17,22 +18,16 @@
     isMounted = true;
 
     try {
-      camaraController
-        .start(video)
-        .then((data) =>
-          console.log(
-            data.data.capabilities,
-            data.data.stream,
-            data.data.videoElement
-          )
-        );
+      camaraController.start(video).then((result) => {
+        stream = result.data.stream;
+      });
     } catch (error) {
       console.log(error);
     }
   });
 
   onDestroy(() => {
-    stopScanner();
+    camaraController.stop(video, stream);
   });
 </script>
 
