@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { startScanner, scanBarcode, stopScanner } from "$lib/scanner";
+  import { scanBarcode } from "$lib/scanner";
   import { onDestroy, onMount } from "svelte";
   import * as camaraController from "$lib/camera";
 
@@ -12,6 +12,12 @@
 
   function handleScanning() {
     scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
+  }
+  function stopScanner() {
+    camaraController.stop(video, stream);
+  }
+  function startScanner() {
+    camaraController.stop(video, stream);
   }
 
   onMount(() => {
