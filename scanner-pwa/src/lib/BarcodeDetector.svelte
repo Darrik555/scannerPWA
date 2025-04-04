@@ -72,8 +72,9 @@
   #code-bounding-box {
     width: 100%;
     height: 100%;
+    position: absolute;
     left: 0px;
     top: 0px;
-    color: #123;
+    background-color: #123;
   }
 </style>
