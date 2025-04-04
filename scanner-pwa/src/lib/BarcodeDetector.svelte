@@ -6,14 +6,16 @@
 
   let video: HTMLVideoElement;
   let stream: MediaStream;
-  let boundingBox: HTMLCanvasElement;
+  let boundingBoxLayer: HTMLCanvasElement;
   let isScanning = $state(false);
   let cameraActive = $state(false);
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
   function handleScanning() {
-    scanBarcode(video).then((response) => (barcodeValue = response ?? ""));
+    scanBarcode(video, drawBoundingBox).then(
+      (response) => (barcodeValue = response ?? "")
+    );
   }
   function stopScanner() {
     camaraController.stop(video, stream);
@@ -22,8 +24,20 @@
     camaraController.start(video);
   }
 
-  function onLocate(detectedCodes: DetectedBarcode[]) {
-    const width = video.offsetWidth;
+  function drawBoundingBox(detectedCodes: DetectedBarcode[]) {
+    boundingBoxLayer.width = video.offsetWidth;
+    boundingBoxLayer.height = video.offsetHeight;
+    const ctx = boundingBoxLayer.getContext("2d") as CanvasRenderingContext2D;
+
+    for (const detectedCode of detectedCodes) {
+      const {
+        boundingBox: { x, y, width, height },
+      } = detectedCode;
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "red";
+      ctx.strokeRect(x, y, width, height);
+    }
   }
 
   onMount(() => {
@@ -45,15 +59,16 @@
 </script>
 
 <div>
-  <div>
+  <div class="container">
     <video
+      class="camera"
       bind:this={video}
       onloadeddata={handleScanning}
       muted
       autoplay
       playsinline
     ></video>
-    <canvas id="code-bounding-box" bind:this={boundingBox}> </canvas>
+    <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
   </div>
 
   <input type="text" bind:value={barcodeValue} />
@@ -62,19 +77,25 @@
 </div>
 
 <style>
-  video {
+  .container {
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .camera {
     width: 100%;
     height: 100%;
     max-width: 400px;
     border: 2px solid #000;
   }
 
-  #code-bounding-box {
+  .overlay {
     width: 100%;
     height: 100%;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
+    z-index: 10;
     background-color: #123;
   }
 </style>
