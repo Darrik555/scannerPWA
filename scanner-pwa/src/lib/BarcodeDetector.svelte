@@ -78,14 +78,14 @@
 
 <style>
   .container {
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     position: relative;
   }
 
   .camera {
     width: 100%;
     height: 100%;
-    max-width: 400px;
     border: 2px solid #000;
   }
 
@@ -96,6 +96,5 @@
     left: 0;
     top: 0;
     z-index: 10;
-    background-color: #123;
   }
 </style>
