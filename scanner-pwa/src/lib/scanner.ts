@@ -18,16 +18,18 @@ const format = {
 // check compatibility
 async function createBarcodeDetector() {
     if (window.BarcodeDetector == undefined) {
-        alert("Native Barcode Detector is not supported by this browser. Use ponyfill");  
+        console.log("Native Barcode Detector is not supported by this browser. Use ponyfill");  
         return new BarcodePonyfill(format); 
     }
 
     const allSupportedFormats = await window.BarcodeDetector.getSupportedFormats();
     const unsupportedFormats = format.formats.filter((format) => !allSupportedFormats.includes(format));
-    //alert(unsupportedFormats);
-
-
-    alert("Use Native Barcode Detector");
+    if(unsupportedFormats.length > 0){
+        console.log("At least one barcode format not supported")
+        return new BarcodePonyfill(format); 
+    }
+    
+    console.log("Use Native Barcode Detector");
     return new window.BarcodeDetector(format);
 }
 
@@ -61,13 +63,17 @@ export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHan
     
 } 
 
-export async function continuousBarcodeScanning(video: HTMLVideoElement){
+export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHandler:  DrawHandler){
     barcodeDetector = await createBarcodeDetector();
-    const detectedBarcodes = await barcodeDetector.detect(video);
 
-    if (detectedBarcodes.length > 0){
-        detectedBarcodes.forEach(barcode => {
-            console.log(barcode.rawValue);
-        });
+    try{
+        const detectedBarcodes = await barcodeDetector.detect(video);
+
+        if (detectedBarcodes.length > 0){
+            drawHandler(detectedBarcodes);
+            return detectedBarcodes; 
+        }
+    }catch(error){
+        console.error('Error on Scanning', error);
     }
 }

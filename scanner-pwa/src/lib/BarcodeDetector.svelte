@@ -1,6 +1,6 @@
 <script lang="ts">
   import { type DetectedBarcode } from "barcode-detector/ponyfill";
-  import { scanBarcode } from "$lib/scanner";
+  import { continuousBarcodeScanning, scanBarcode } from "$lib/scanner";
   import { onDestroy, onMount } from "svelte";
   import * as camaraController from "$lib/camera";
 
@@ -23,6 +23,20 @@
   function startScanner() {
     camaraController.start(video);
   }
+
+  $effect(() => {
+    if (cameraActive) {
+      continuousBarcodeScanning(video, drawBoundingBox).then((response) => {
+        if (response) {
+          response.forEach((barcode) => {
+            console.log(barcode.rawValue);
+          });
+        } else {
+          console.log("no barcode");
+        }
+      });
+    }
+  });
 
   function clearCanvas(canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d");
@@ -57,26 +71,21 @@
       camaraController.start(video).then((result) => {
         //video = result.data.videoElement;
         stream = result.data.stream;
+        cameraActive = true;
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 
   onDestroy(() => {
     camaraController.stop(video, stream);
+    cameraActive = false;
   });
 </script>
 
 <div class="container">
-  <video
-    class="camera"
-    bind:this={video}
-    onloadeddata={handleScanning}
-    muted
-    autoplay
-    playsinline
-  ></video>
+  <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
 </div>
 <input type="text" bind:value={barcodeValue} />
