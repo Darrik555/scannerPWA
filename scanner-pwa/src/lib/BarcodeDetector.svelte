@@ -32,8 +32,8 @@
   }
 
   function drawBoundingBox(detectedCodes: DetectedBarcode[]) {
-    boundingBoxLayer.width = video.offsetWidth;
-    boundingBoxLayer.height = video.offsetHeight;
+    boundingBoxLayer.width = video.videoWidth;
+    boundingBoxLayer.height = video.videoHeight;
     const ctx = boundingBoxLayer.getContext("2d") as CanvasRenderingContext2D;
 
     clearCanvas(boundingBoxLayer);
