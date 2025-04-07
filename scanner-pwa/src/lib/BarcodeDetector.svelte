@@ -24,16 +24,26 @@
     camaraController.start(video);
   }
 
+  function clearCanvas(canvas: HTMLCanvasElement) {
+    const ctx = canvas.getContext("2d");
+    if (ctx !== null) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
   function drawBoundingBox(detectedCodes: DetectedBarcode[]) {
     boundingBoxLayer.width = video.offsetWidth;
     boundingBoxLayer.height = video.offsetHeight;
     const ctx = boundingBoxLayer.getContext("2d") as CanvasRenderingContext2D;
+
+    clearCanvas(boundingBoxLayer);
 
     for (const detectedCode of detectedCodes) {
       const {
         boundingBox: { x, y, width, height },
       } = detectedCode;
 
+      console.log(x, y, width, height);
       ctx.lineWidth = 2;
       ctx.strokeStyle = "red";
       ctx.strokeRect(x, y, width, height);
@@ -58,22 +68,21 @@
   });
 </script>
 
-<div>
-  <div class="container">
-    <video
-      class="camera"
-      bind:this={video}
-      onloadeddata={handleScanning}
-      muted
-      autoplay
-      playsinline
-    ></video>
-    <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
+<div class="container">
+  <video
+    class="camera"
+    bind:this={video}
+    onloadeddata={handleScanning}
+    muted
+    autoplay
+    playsinline
+  ></video>
+  <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
+  <div class="inputs">
+    <input type="text" bind:value={barcodeValue} />
+    <button onclick={startScanner}>Start</button>
+    <button onclick={stopScanner}>Stop</button>
   </div>
-
-  <input type="text" bind:value={barcodeValue} />
-  <button onclick={startScanner}>Start</button>
-  <button onclick={stopScanner}>Stop</button>
 </div>
 
 <style>
@@ -95,6 +104,5 @@
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 10;
   }
 </style>
