@@ -78,11 +78,9 @@
     playsinline
   ></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
-  <div class="inputs">
-    <input type="text" bind:value={barcodeValue} />
-    <button onclick={startScanner}>Start</button>
-    <button onclick={stopScanner}>Stop</button>
-  </div>
+  <input type="text" bind:value={barcodeValue} />
+  <button onclick={startScanner}>Start</button>
+  <button onclick={stopScanner}>Stop</button>
 </div>
 
 <style>
