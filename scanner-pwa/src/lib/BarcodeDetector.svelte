@@ -27,13 +27,7 @@
   $effect(() => {
     if (cameraActive) {
       continuousBarcodeScanning(video, drawBoundingBox).then((response) => {
-        if (response) {
-          response.forEach((barcode) => {
-            console.log(barcode.rawValue);
-          });
-        } else {
-          console.log("no barcode");
-        }
+        console.log(response);
       });
     }
   });
