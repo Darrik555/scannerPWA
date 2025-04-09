@@ -5,7 +5,7 @@ export async function start(videoElement: HTMLVideoElement){
     // frameRate? frameRate: { ideal: 10, max: 15 }
     const constraints = {
         audio: false,
-        video: { width: 1280, height: 720, facingMode: 'environment' }
+        video: { width: 1280, height: 720, facingMode: 'environment', frameRate: { ideal: 10, max: 15 } }
       };
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -24,8 +24,14 @@ export async function start(videoElement: HTMLVideoElement){
 
 export async function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
 
-	videoElement.src = '';
-	videoElement.srcObject = null;
+    if(videoElement.src !== undefined){
+        videoElement.src = '';
+    }
+
+	if(videoElement.srcObject !== null){
+        videoElement.srcObject = null;  
+    }
+	
 
     stream.getTracks().forEach(track => 
         {
