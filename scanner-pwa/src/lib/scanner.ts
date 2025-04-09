@@ -75,6 +75,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
                 if (detectedBarcodes.length > 0){
                     console.log("Barcodes: " + detectedBarcodes);
                     drawHandler(detectedBarcodes);
+                    await new Promise(r => setTimeout(r, 500));
                     window.requestAnimationFrame(barcodeFrame());
                 }
             }catch(error){
