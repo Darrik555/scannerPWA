@@ -70,7 +70,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
         //console.log("enter barcodeFrame()");
         if(video.readyState !== 0){
             try{
-                if(now - then < 1000 / 25){
+                if(now - then > 1000 / 25){
                     const detectedBarcodes = await barcodeDetector.detect(video);
         
                     if (detectedBarcodes.length > 0){
