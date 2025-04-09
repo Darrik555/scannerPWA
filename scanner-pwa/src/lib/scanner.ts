@@ -67,7 +67,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
     barcodeDetector = await createBarcodeDetector();
 
     const barcodeFrame = (then: number) => async (now: number) =>  {
-        console.log("now()"+ now + "   and  then " + then);
+        console.log("time diff "+ (now - then));
         if(video.readyState !== 0){
             try{
                 if(now - then > 1000 / 25){
@@ -76,8 +76,8 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
                     if (detectedBarcodes.length > 0){
                         console.log("Barcodes: " + detectedBarcodes);
                         drawHandler(detectedBarcodes);
-                        window.requestAnimationFrame(barcodeFrame(now));
                     }
+                    window.requestAnimationFrame(barcodeFrame(now));
                 }else{
                     window.requestAnimationFrame(barcodeFrame(then));
                 }
@@ -87,7 +87,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
             }
         }
         //console.log("enter barcodeFrame() back");
-        window.requestAnimationFrame(barcodeFrame(then));
+        //window.requestAnimationFrame(barcodeFrame(then));
     }
     barcodeFrame(window.performance.now())(window.performance.now());
 }
