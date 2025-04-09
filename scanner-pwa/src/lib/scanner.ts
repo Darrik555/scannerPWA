@@ -87,7 +87,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
             }
         }
         //console.log("enter barcodeFrame() back");
-        //window.requestAnimationFrame(barcodeFrame(then));
+        window.requestAnimationFrame(barcodeFrame(then));
     }
     barcodeFrame(window.performance.now())(window.performance.now());
 }
