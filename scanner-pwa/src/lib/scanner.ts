@@ -78,5 +78,5 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
             console.error('Error on Scanning', error);
         }
     }
-    
+    window.requestAnimationFrame(barcodeFrame);
 }
