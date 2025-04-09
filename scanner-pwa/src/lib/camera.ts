@@ -14,7 +14,7 @@ export async function start(videoElement: HTMLVideoElement){
 
     await new Promise((resolve) => {
         resolve(
-        videoElement.onloadeddata = () => {
+        videoElement.onloadedmetadata = () => {
             console.log("loadeddata in videoelement");
             videoElement.play();
         });
