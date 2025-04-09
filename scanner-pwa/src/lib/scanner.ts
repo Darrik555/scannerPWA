@@ -67,11 +67,13 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
     barcodeDetector = await createBarcodeDetector();
 
     const barcodeFrame = () => async () =>  {
+        console.log("enter barcodeFrame()");
         if(video.readyState !== 0){
             try{
                 const detectedBarcodes = await barcodeDetector.detect(video);
         
                 if (detectedBarcodes.length > 0){
+                    console.log("Barcodes: " + detectedBarcodes);
                     drawHandler(detectedBarcodes);
                     window.requestAnimationFrame(barcodeFrame());
                 }
@@ -79,6 +81,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
                 console.error('Error on Scanning', error);
             }
         }
+        console.log("enter barcodeFrame() back");
         window.requestAnimationFrame(barcodeFrame());
     }
 
