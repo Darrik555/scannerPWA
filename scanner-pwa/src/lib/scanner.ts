@@ -67,16 +67,19 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
     barcodeDetector = await createBarcodeDetector();
 
     const barcodeFrame = () => async () =>  {
-        try{
-            const detectedBarcodes = await barcodeDetector.detect(video);
-    
-            if (detectedBarcodes.length > 0){
-                drawHandler(detectedBarcodes);
-                window.requestAnimationFrame(barcodeFrame());
+        if(video.readyState !== 0){
+            try{
+                const detectedBarcodes = await barcodeDetector.detect(video);
+        
+                if (detectedBarcodes.length > 0){
+                    drawHandler(detectedBarcodes);
+                    window.requestAnimationFrame(barcodeFrame());
+                }
+            }catch(error){
+                console.error('Error on Scanning', error);
             }
-        }catch(error){
-            console.error('Error on Scanning', error);
         }
+        window.requestAnimationFrame(barcodeFrame());
     }
-    window.requestAnimationFrame(barcodeFrame());
+
 }
