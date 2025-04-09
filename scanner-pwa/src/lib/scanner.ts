@@ -82,6 +82,7 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
             }
         }
         //console.log("enter barcodeFrame() back");
+        await new Promise(r => setTimeout(r, 500));
         window.requestAnimationFrame(barcodeFrame());
     }
     barcodeFrame()();
