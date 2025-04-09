@@ -84,5 +84,5 @@ export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHan
         console.log("enter barcodeFrame() back");
         window.requestAnimationFrame(barcodeFrame());
     }
-    barcodeFrame();
+    barcodeFrame()();
 }
