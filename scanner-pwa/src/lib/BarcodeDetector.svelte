@@ -7,6 +7,9 @@
   let video: HTMLVideoElement;
   let stream: MediaStream;
   let boundingBoxLayer: HTMLCanvasElement;
+  let inputRef: HTMLInputElement;
+  let container: HTMLDivElement;
+
   let isScanning = $state(false);
   let cameraActive = $state(false);
   let isMounted = $state(false);
@@ -16,12 +19,26 @@
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
     );
+    isScanning = false;
   }
+
+  function startScanner() {
+    try {
+      camaraController.start(video).then((result) => {
+        stream = result.data.stream;
+        isScanning = true;
+        //cameraActive = true;
+        openFullscreen();
+        handleScanning();
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   function stopScanner() {
     camaraController.stop(video, stream);
-  }
-  function startScanner() {
-    camaraController.start(video);
+    isScanning = false;
   }
 
   $effect(() => {
@@ -58,45 +75,94 @@
     }
   }
 
+  function openFullscreen() {
+    const elem = container;
+
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+      // @ts-expect-error
+    } else if (elem.webkitRequestFullscreen) {
+      // @ts-expect-error
+      elem.webkitRequestFullscreen();
+      // @ts-expect-error
+    } else if (elem.msRequestFullscreen) {
+      // @ts-expect-error
+      elem.msRequestFullscreen();
+    }
+  }
+
+  function closeFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+      // @ts-expect-error
+    } else if (document.webkitExitFullscreen) {
+      // @ts-expect-error
+      document.webkitExitFullscreen();
+      // @ts-expect-error
+    } else if (document.msExitFullscreen) {
+      // @ts-expect-error
+      document.msExitFullscreen();
+    }
+  }
+
   onMount(() => {
     isMounted = true;
 
-    try {
-      camaraController.start(video).then((result) => {
-        //video = result.data.videoElement;
-        stream = result.data.stream;
-        cameraActive = true;
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    inputRef.focus();
   });
 
   onDestroy(() => {
     camaraController.stop(video, stream);
     cameraActive = false;
+    isScanning = false;
   });
 </script>
 
-<div class="container">
+<div
+  class="container"
+  class:hidden={!isScanning}
+  bind:this={container}
+  onfullscreenchange={closeFullscreen}
+>
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
 </div>
-<input type="text" bind:value={barcodeValue} />
-<button onclick={startScanner}>Start</button>
+<div class="scanning-flexbox">
+  <label for="barcodeInput">Scan ID</label>
+  <input
+    type="text"
+    class="barcodeInput"
+    id="barcodeInput"
+    bind:value={barcodeValue}
+    bind:this={inputRef}
+  />
+  <button type="button" class="start-scanner-button" onclick={startScanner}
+    >Start</button
+  >
+</div>
+
 <button onclick={stopScanner}>Stop</button>
 
 <style>
+  .scanning-flexbox {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid gray;
+    padding: 1px;
+  }
+
   .container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
   }
 
   .camera {
     width: 100%;
     height: 100%;
-    border: 2px solid #000;
   }
 
   .overlay {
@@ -105,5 +171,22 @@
     position: absolute;
     left: 0;
     top: 0;
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+
+  input {
+    flex-grow: 2;
+    border: none;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  .start-scanner-button {
+    border: 1px solid grey;
   }
 </style>
