@@ -19,7 +19,7 @@
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
     );
-    isScanning = false;
+    //isScanning = false;
   }
 
   function startScanner() {
@@ -127,8 +127,9 @@
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
 </div>
+
+<label for="barcodeInput">Scan ID</label>
 <div class="scanning-flexbox">
-  <label for="barcodeInput">Scan ID</label>
   <input
     type="text"
     class="barcodeInput"
