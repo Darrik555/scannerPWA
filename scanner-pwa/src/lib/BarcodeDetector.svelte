@@ -19,7 +19,7 @@
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
     );
-    return;
+    console.log("handlescanner after barcode");
   }
 
   function startScanner() {
@@ -30,15 +30,18 @@
         //cameraActive = true;
         openFullscreen();
         handleScanning();
+        console.log("startscanner after barcode");
       });
 
       stopScanner();
+      console.log("startscanner after stopscanner");
     } catch (error) {
       console.error(error);
     }
   }
 
   function stopScanner() {
+    console.log("in stopscanner");
     closeFullscreen();
     isScanning = false;
     camaraController.stop(video, stream);
