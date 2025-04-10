@@ -30,16 +30,17 @@
         openFullscreen();
         handleScanning();
       });
+
+      stopScanner();
     } catch (error) {
       console.error(error);
     }
-    stopScanner();
   }
 
   function stopScanner() {
-    camaraController.stop(video, stream);
-    isScanning = false;
     closeFullscreen();
+    isScanning = false;
+    camaraController.stop(video, stream);
   }
 
   $effect(() => {
@@ -82,6 +83,10 @@
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
       // @ts-expect-error
+    } else if (elem.mozRequestFullScreen) {
+      // @ts-expect-error
+      elem.mozRequestFullScreen();
+      // @ts-expect-error
     } else if (elem.webkitRequestFullscreen) {
       // @ts-expect-error
       elem.webkitRequestFullscreen();
@@ -95,6 +100,10 @@
   function closeFullscreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
+      // @ts-expect-error}
+    } else if (document.mozCancelFullScreen) {
+      // @ts-expect-error
+      document.mozCancelFullScreen();
       // @ts-expect-error
     } else if (document.webkitExitFullscreen) {
       // @ts-expect-error
