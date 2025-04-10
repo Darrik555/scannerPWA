@@ -19,6 +19,7 @@
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
     );
+    return;
   }
 
   function startScanner() {
