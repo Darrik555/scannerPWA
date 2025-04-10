@@ -19,7 +19,6 @@
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
     );
-    //isScanning = false;
   }
 
   function startScanner() {
@@ -34,6 +33,7 @@
     } catch (error) {
       console.error(error);
     }
+    isScanning = false;
   }
 
   function stopScanner() {
