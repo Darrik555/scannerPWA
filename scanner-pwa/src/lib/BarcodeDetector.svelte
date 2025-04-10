@@ -39,6 +39,7 @@
   function stopScanner() {
     camaraController.stop(video, stream);
     isScanning = false;
+    closeFullscreen();
   }
 
   $effect(() => {
