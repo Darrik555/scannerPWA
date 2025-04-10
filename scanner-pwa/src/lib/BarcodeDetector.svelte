@@ -29,11 +29,11 @@
         //cameraActive = true;
         openFullscreen();
         handleScanning();
+        stopScanner();
       });
     } catch (error) {
       console.error(error);
     }
-    isScanning = false;
   }
 
   function stopScanner() {
