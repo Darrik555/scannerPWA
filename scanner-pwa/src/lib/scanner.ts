@@ -65,7 +65,7 @@ export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHan
         }   
     }
     barcodeFrame(window.performance.now())(window.performance.now());
-    return "";
+    return "test";
 }
                
     
