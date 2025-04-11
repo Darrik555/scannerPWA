@@ -10,12 +10,13 @@ export async function start(videoElement: HTMLVideoElement){
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    videoElement.srcObject = stream;
+
 
     await new Promise((resolve) => {
         resolve(
         videoElement.onloadedmetadata = () => {
             console.log("loadeddata in videoelement");
+            videoElement.srcObject = stream;
             videoElement.play();
         });
     });
