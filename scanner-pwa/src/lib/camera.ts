@@ -13,9 +13,7 @@ export async function start(videoElement: HTMLVideoElement){
     videoElement.srcObject = stream;
     videoElement.play();
 
-    await new Promise((resolve) => {
-        videoElement.addEventListener('loadeddata', resolve);
-    });
+    waitForVideoReady(videoElement);
 
 
 
@@ -23,6 +21,14 @@ export async function start(videoElement: HTMLVideoElement){
     const capabilities: Partial<MediaTrackCapabilities> = track?.getCapabilities?.() ?? {};
     
     return{data: {videoElement, stream, capabilities}};
+}
+
+function waitForVideoReady(video: HTMLVideoElement){
+    return new Promise<void>((resolve) => {
+        if(video.readyState >= 2){
+            resolve();
+        }
+    });
 }
 
 export async function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
