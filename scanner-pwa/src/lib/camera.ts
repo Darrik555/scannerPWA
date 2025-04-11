@@ -11,7 +11,10 @@ export async function start(videoElement: HTMLVideoElement){
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     videoElement.srcObject = stream;
-    //videoElement.play();
+    videoElement.addEventListener('canplay',()=>{
+        videoElement.play();
+    });
+
 
     const [track] = stream.getVideoTracks();
     const capabilities: Partial<MediaTrackCapabilities> = track?.getCapabilities?.() ?? {};

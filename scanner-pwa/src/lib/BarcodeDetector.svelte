@@ -15,25 +15,25 @@
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
-  async function startScanning() {
+  function startScanning() {
     try {
-      await camaraController.start(video).then((result) => {
+      camaraController.start(video).then((result) => {
         stream = result.data.stream;
         isScanning = true;
         //cameraActive = true;
         openFullscreen();
-        console.log("start camera");
+        console.log("started camera");
       });
 
       console.log("into scanBarcode");
-      barcodeValue = await scanBarcode(video, drawBoundingBox);
-
-      console.log("into stopScanner");
-      await camaraController.stop(video, stream).then(() => {
-        console.log("in stopscanner");
-        closeFullscreen();
-        isScanning = false;
-      });
+      scanBarcode(video, drawBoundingBox)
+        .then((response) => (barcodeValue = response ?? ""))
+        .finally(() => {
+          closeFullscreen();
+          isScanning = false;
+          camaraController.stop(video, stream);
+          console.log("stopped camera");
+        });
     } catch (error) {
       console.error("Error in startScanner()" + error);
     }
