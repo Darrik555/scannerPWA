@@ -26,9 +26,7 @@
       });
 
       console.log("into scanBarcode");
-      await scanBarcode(video, drawBoundingBox).then(
-        (response) => (barcodeValue = response ?? "")
-      );
+      barcodeValue = await scanBarcode(video, drawBoundingBox);
 
       console.log("into stopScanner");
       await camaraController.stop(video, stream).then(() => {
