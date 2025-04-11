@@ -13,8 +13,8 @@ export async function start(videoElement: HTMLVideoElement){
     videoElement.srcObject = stream;
     videoElement.play();
 
-    await new Promise(() => {
-        videoElement.addEventListener('loadeddata', () => {console.log("data loaded")});
+    await new Promise((resolve) => {
+        videoElement.addEventListener('loadeddata', resolve);
     });
 
 
