@@ -12,8 +12,9 @@ export async function start(videoElement: HTMLVideoElement){
 
     videoElement.srcObject = stream;
     
+    await videoElement.play();
 
-    await waitForVideoReady(videoElement).then(() => videoElement.play());
+    await waitForVideoReady(videoElement);
 
 
 
