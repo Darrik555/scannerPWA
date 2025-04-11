@@ -42,6 +42,7 @@ export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHan
     
         while(scanning){
             if(video.readyState !== 0){
+                console.log("REady state")
                 try{
                     const barcodes = await barcodeDetector.detect(video);
                     if(barcodes.length > 0){

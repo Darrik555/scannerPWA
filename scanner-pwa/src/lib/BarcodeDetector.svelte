@@ -25,10 +25,12 @@
         console.log("start camera");
       });
 
+      console.log("into scanBarcode");
       await scanBarcode(video, drawBoundingBox).then(
         (response) => (barcodeValue = response ?? "")
       );
 
+      console.log("into stopScanner");
       await camaraController.stop(video, stream).then(() => {
         console.log("in stopscanner");
         closeFullscreen();
