@@ -17,22 +17,25 @@
 
   function startScanning() {
     try {
-      camaraController.start(video).then((result) => {
-        stream = result.data.stream;
-        isScanning = true;
-        //cameraActive = true;
-        openFullscreen();
-        console.log("started camera");
-      });
-
-      console.log("into scanBarcode");
-      scanBarcode(video, drawBoundingBox)
-        .then((response) => (barcodeValue = response ?? ""))
-        .finally(() => {
-          closeFullscreen();
-          isScanning = false;
-          camaraController.stop(video, stream);
-          console.log("stopped camera");
+      camaraController
+        .start(video)
+        .then((result) => {
+          stream = result.data.stream;
+          isScanning = true;
+          //cameraActive = true;
+          openFullscreen();
+          console.log("started camera");
+        })
+        .then(() => {
+          console.log("into scanBarcode");
+          scanBarcode(video, drawBoundingBox)
+            .then((response) => (barcodeValue = response ?? ""))
+            .finally(() => {
+              closeFullscreen();
+              isScanning = false;
+              camaraController.stop(video, stream);
+              console.log("stopped camera");
+            });
         });
     } catch (error) {
       console.error("Error in startScanner()" + error);
