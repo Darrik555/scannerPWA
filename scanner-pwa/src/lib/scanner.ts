@@ -38,33 +38,38 @@ type DrawHandler = (barcodes: DetectedBarcode[]) => void;
 export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHandler ) {
     barcodeDetector = await createBarcodeDetector();
 
-    const barcodeFrame = (then: number) => async (now: number) =>  {
-        if(video.readyState !== 0){
-            try{
-                if(now - then > 1000 / 25){
-                    const detectedBarcodes = await barcodeDetector.detect(video);
-        
-                    if (detectedBarcodes.length > 0){
-                        console.log("first format "+detectedBarcodes[0].format)
-                        detectedBarcodes.forEach(element => {
-                            console.log("Value " + element.rawValue);    
-                        });
-                        drawHandler(detectedBarcodes);
-
-                        return detectedBarcodes[0].rawValue;
+    return new Promise<string | null>((resolve,reject) => {
+        const barcodeFrame = (then: number) => async (now: number) =>  {
+            if(video.readyState !== 0){
+                try{
+                    if(now - then > 1000 / 25){
+                        const detectedBarcodes = await barcodeDetector.detect(video);
+            
+                        if (detectedBarcodes.length > 0){
+                            console.log("first format "+detectedBarcodes[0].format)
+                            detectedBarcodes.forEach(element => {
+                                console.log("Value " + element.rawValue);    
+                            });
+                            drawHandler(detectedBarcodes);
+                            resolve(detectedBarcodes[0].rawValue);
+                            return;
+                        }
+                        window.requestAnimationFrame(barcodeFrame(now));
+                    }else{
+                        window.requestAnimationFrame(barcodeFrame(then));
                     }
-                    window.requestAnimationFrame(barcodeFrame(now));
-                }else{
-                    window.requestAnimationFrame(barcodeFrame(then));
+                }catch(error){
+                    console.error('Error on Scanning', error);
+                    reject(error);
+                    return;
                 }
-            }catch(error){
-                console.error('Error on Scanning', error);
-            }
-        }else{
-            window.requestAnimationFrame(barcodeFrame(now));
-        }   
-    }
-    barcodeFrame(window.performance.now())(window.performance.now());
+            }else{
+                window.requestAnimationFrame(barcodeFrame(now));
+            }   
+        }
+        barcodeFrame(window.performance.now())(window.performance.now());
+    })
+    
 }
                
     
