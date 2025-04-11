@@ -15,6 +15,12 @@
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
+  function scan() {
+    startScanner();
+    handleScanning();
+    stopScanner();
+  }
+
   function handleScanning() {
     scanBarcode(video, drawBoundingBox).then(
       (response) => (barcodeValue = response ?? "")
@@ -25,26 +31,26 @@
   function startScanner() {
     try {
       camaraController.start(video).then((result) => {
-        openFullscreen();
         stream = result.data.stream;
         isScanning = true;
         //cameraActive = true;
+        openFullscreen();
         console.log("start camera");
       });
-
-      handleScanning();
-      stopScanner();
-      console.log("startscanner after stopscanner");
     } catch (error) {
-      console.error(error);
+      console.error("Error in startScanner()" + error);
     }
   }
 
   function stopScanner() {
-    console.log("in stopscanner");
-    closeFullscreen();
-    isScanning = false;
-    camaraController.stop(video, stream);
+    try {
+      console.log("in stopscanner");
+      closeFullscreen();
+      isScanning = false;
+      camaraController.stop(video, stream);
+    } catch (error) {
+      console.error("Error in stopScanner()" + error);
+    }
   }
 
   $effect(() => {
@@ -146,7 +152,7 @@
     bind:value={barcodeValue}
     bind:this={inputRef}
   />
-  <button type="button" class="start-scanner-button" onclick={startScanner}
+  <button type="button" class="start-scanner-button" onclick={scan}
     >Start</button
   >
 </div>
