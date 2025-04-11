@@ -25,14 +25,14 @@
   function startScanner() {
     try {
       camaraController.start(video).then((result) => {
+        openFullscreen();
         stream = result.data.stream;
         isScanning = true;
         //cameraActive = true;
-        openFullscreen();
-        handleScanning();
-        console.log("startscanner after barcode");
+        console.log("start camera");
       });
 
+      handleScanning();
       stopScanner();
       console.log("startscanner after stopscanner");
     } catch (error) {
@@ -132,12 +132,7 @@
   });
 </script>
 
-<div
-  class="container"
-  class:hidden={!isScanning}
-  bind:this={container}
-  onfullscreenchange={closeFullscreen}
->
+<div class="container" class:hidden={!isScanning} bind:this={container}>
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
 </div>
