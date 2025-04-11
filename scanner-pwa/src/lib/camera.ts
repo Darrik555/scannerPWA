@@ -11,9 +11,12 @@ export async function start(videoElement: HTMLVideoElement){
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     videoElement.srcObject = stream;
-    videoElement.addEventListener('canplay',()=>{
-        videoElement.play();
+    videoElement.play();
+
+    await new Promise(() => {
+        videoElement.addEventListener('loadeddata', () => {console.log("data loaded")});
     });
+
 
 
     const [track] = stream.getVideoTracks();
