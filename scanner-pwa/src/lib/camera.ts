@@ -11,9 +11,9 @@ export async function start(videoElement: HTMLVideoElement){
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     videoElement.srcObject = stream;
-    videoElement.play();
+    
 
-    waitForVideoReady(videoElement);
+    await waitForVideoReady(videoElement).then(() => videoElement.play());
 
 
 
@@ -27,6 +27,8 @@ function waitForVideoReady(video: HTMLVideoElement){
     return new Promise<void>((resolve) => {
         if(video.readyState >= 2){
             resolve();
+        }else{
+            video.onloadeddata = () => resolve();
         }
     });
 }
