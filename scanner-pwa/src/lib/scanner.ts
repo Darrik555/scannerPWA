@@ -60,7 +60,9 @@ export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHan
             }catch(error){
                 console.error('Error on Scanning', error);
             }
-        }
+        }else{
+            window.requestAnimationFrame(barcodeFrame(now));
+        }   
     }
     barcodeFrame(window.performance.now())(window.performance.now());
     return "";
