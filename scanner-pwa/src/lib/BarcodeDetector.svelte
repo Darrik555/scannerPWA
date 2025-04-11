@@ -15,41 +15,27 @@
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
-  function scan() {
-    startScanner();
-    handleScanning();
-    stopScanner();
-  }
-
-  function handleScanning() {
-    scanBarcode(video, drawBoundingBox).then(
-      (response) => (barcodeValue = response ?? "")
-    );
-    console.log("handlescanner after barcode");
-  }
-
-  function startScanner() {
+  async function startScanning() {
     try {
-      camaraController.start(video).then((result) => {
+      await camaraController.start(video).then((result) => {
         stream = result.data.stream;
         isScanning = true;
         //cameraActive = true;
         openFullscreen();
         console.log("start camera");
       });
+
+      await scanBarcode(video, drawBoundingBox).then(
+        (response) => (barcodeValue = response ?? "")
+      );
+
+      await camaraController.stop(video, stream).then(() => {
+        console.log("in stopscanner");
+        closeFullscreen();
+        isScanning = false;
+      });
     } catch (error) {
       console.error("Error in startScanner()" + error);
-    }
-  }
-
-  function stopScanner() {
-    try {
-      console.log("in stopscanner");
-      closeFullscreen();
-      isScanning = false;
-      camaraController.stop(video, stream);
-    } catch (error) {
-      console.error("Error in stopScanner()" + error);
     }
   }
 
@@ -152,12 +138,10 @@
     bind:value={barcodeValue}
     bind:this={inputRef}
   />
-  <button type="button" class="start-scanner-button" onclick={scan}
+  <button type="button" class="start-scanner-button" onclick={startScanning}
     >Start</button
   >
 </div>
-
-<button onclick={stopScanner}>Stop</button>
 
 <style>
   .scanning-flexbox {
