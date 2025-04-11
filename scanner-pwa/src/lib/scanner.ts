@@ -37,18 +37,32 @@ type DrawHandler = (barcodes: DetectedBarcode[]) => void;
 
 export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHandler ) {
     barcodeDetector = await createBarcodeDetector();
-    
-    const barcodes = await barcodeDetector.detect(video);
-    if(barcodes.length > 0){
-        scanning = false;
-        console.log("first format "+barcodes[0].format)
-        barcodes.forEach(element => {
-            console.log("Value " + element.rawValue);    
-        });
-        drawHandler(barcodes);
+
+    const barcodeFrame = (then: number) => async (now: number) =>  {
+        if(video.readyState !== 0){
+            try{
+                if(now - then > 1000 / 25){
+                    const detectedBarcodes = await barcodeDetector.detect(video);
         
-        return barcodes[0].rawValue;
+                    if (detectedBarcodes.length > 0){
+                        console.log("first format "+detectedBarcodes[0].format)
+                        detectedBarcodes.forEach(element => {
+                            console.log("Value " + element.rawValue);    
+                        });
+                        drawHandler(detectedBarcodes);
+
+                        return detectedBarcodes[0].rawValue;
+                    }
+                    window.requestAnimationFrame(barcodeFrame(now));
+                }else{
+                    window.requestAnimationFrame(barcodeFrame(then));
+                }
+            }catch(error){
+                console.error('Error on Scanning', error);
+            }
+        }
     }
+    barcodeFrame(window.performance.now())(window.performance.now());
 }
                
     
