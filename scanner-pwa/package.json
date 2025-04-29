@@ -21,6 +21,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"barcode-detector": "^3.0.1"
+		"barcode-detector": "^3.0.1",
+		"html5-qrcode": "^2.3.8"
 	}
 }
