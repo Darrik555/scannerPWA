@@ -17,6 +17,8 @@
 
   function startScanning() {
     const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    isScanning = true;
     html5QrcodeScanner
       .start(
         { facingMode: "environment" },
@@ -24,7 +26,10 @@
         onScanSuccess,
         onScanFailure
       )
-      .catch((err) => console.error("Start failed", err));
+      .catch((err) => {
+        isScanning = false;
+        console.error("Start failed", err);
+      });
   }
 
   onMount(() => {
@@ -35,6 +40,7 @@
 
   onDestroy(() => {
     if (html5QrcodeScanner) {
+      isScanning = false;
       html5QrcodeScanner
         .stop()
         .then(() => {
