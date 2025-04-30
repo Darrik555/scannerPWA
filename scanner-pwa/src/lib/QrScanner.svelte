@@ -64,6 +64,7 @@
     inputRef.focus();
 
     html5QrcodeScanner = new Html5Qrcode("qr-reader", {
+      formatsToSupport: [0, 5, 9, 4],
       useBarCodeDetectorIfSupported: true,
       verbose: false,
     });
