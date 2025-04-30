@@ -77,7 +77,7 @@
   }
 
   function openFullscreen() {
-    const elem = container;
+    const elem = video;
 
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
