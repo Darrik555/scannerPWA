@@ -9,7 +9,11 @@
   let isScanning = $state(false);
   let barcodeValue: string = $state("");
 
-  function onScanSuccess(decodedText: string, decodedResult: any) {}
+  function onScanSuccess(decodedText: string, decodedResult: any) {
+    barcodeValue = decodedText;
+    alert(decodedResult);
+    isScanning = false;
+  }
 
   function onScanFailure(error: any) {
     console.warn(`Code scan error = ${error}`);
