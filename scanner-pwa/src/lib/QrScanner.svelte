@@ -3,6 +3,11 @@
   import { Html5Qrcode } from "html5-qrcode";
 
   let html5QrcodeScanner: Html5Qrcode;
+  let inputRef: HTMLInputElement;
+  let container: HTMLDivElement;
+
+  let isScanning = $state(false);
+  let barcodeValue: string = $state("");
 
   function onScanSuccess(decodedText: string, decodedResult: any) {}
 
@@ -10,9 +15,7 @@
     console.warn(`Code scan error = ${error}`);
   }
 
-  onMount(() => {
-    html5QrcodeScanner = new Html5Qrcode("qr-reader");
-
+  function startScanning() {
     const config = { fps: 10, qrbox: { width: 250, height: 250 } };
     html5QrcodeScanner
       .start(
@@ -22,6 +25,12 @@
         onScanFailure
       )
       .catch((err) => console.error("Start failed", err));
+  }
+
+  onMount(() => {
+    inputRef.focus();
+
+    html5QrcodeScanner = new Html5Qrcode("qr-reader");
   });
 
   onDestroy(() => {
@@ -36,4 +45,55 @@
   });
 </script>
 
-<div id="qr-reader"></div>
+<div class="container" class:hidden={!isScanning} bind:this={container}>
+  <div id="qr-reader"></div>
+</div>
+
+<label for="barcodeInput">Scan ID</label>
+<div class="scanning-flexbox">
+  <input
+    type="text"
+    class="barcodeInput"
+    id="barcodeInput"
+    bind:value={barcodeValue}
+    bind:this={inputRef}
+  />
+  <button type="button" class="start-scanner-button" onclick={startScanning}
+    >Start</button
+  >
+</div>
+
+<style>
+  .scanning-flexbox {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid gray;
+    padding: 1px;
+  }
+
+  .container {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+
+  input {
+    flex-grow: 2;
+    border: none;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  .start-scanner-button {
+    border: 1px solid grey;
+  }
+</style>
