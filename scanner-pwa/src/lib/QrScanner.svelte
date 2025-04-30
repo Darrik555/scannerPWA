@@ -7,6 +7,7 @@
   let container: HTMLDivElement;
 
   let isScanning = $state(false);
+  let isTorchOn = $state(false);
   let barcodeValue: string = $state("");
 
   function onScanSuccess(decodedText: string, decodedResult: any) {
@@ -47,12 +48,24 @@
     }
   }
 
+  async function toggleTorch() {
+    if (html5QrcodeScanner) {
+      let torchCapability = html5QrcodeScanner
+        .getRunningTrackCameraCapabilities()
+        .torchFeature();
+      if (torchCapability.isSupported()) {
+        await torchCapability.apply(!isTorchOn);
+        isTorchOn = !isTorchOn;
+      }
+    }
+  }
+
   onMount(() => {
     inputRef.focus();
 
     html5QrcodeScanner = new Html5Qrcode("qr-reader", {
       useBarCodeDetectorIfSupported: true,
-      verbose: true,
+      verbose: false,
     });
   });
 
@@ -63,6 +76,9 @@
 
 <div class="container" class:hidden={!isScanning} bind:this={container}>
   <div id="qr-reader"></div>
+  <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
+  <button class="round" id="torch-button" onclick={toggleTorch}>&#x1F526</button
+  >
 </div>
 
 <label for="barcodeInput">Scan ID</label>
@@ -111,5 +127,30 @@
 
   .start-scanner-button {
     border: 1px solid grey;
+  }
+
+  .round {
+    border: none;
+    position: fixed;
+    margin: 15px;
+    padding: 5px;
+    font-size: 40px;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+  }
+
+  #cancel-button {
+    color: white;
+    background-color: rgb(201, 10, 10);
+    bottom: 0;
+    left: 0;
+  }
+
+  #torch-button {
+    color: white;
+    background-color: aqua;
+    bottom: 0;
+    right: 0;
   }
 </style>
