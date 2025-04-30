@@ -11,8 +11,7 @@
 
   function onScanSuccess(decodedText: string, decodedResult: any) {
     barcodeValue = decodedText;
-    alert(decodedResult);
-    isScanning = false;
+    stopScanning();
   }
 
   function onScanFailure(error: any) {
@@ -20,7 +19,7 @@
   }
 
   function startScanning() {
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    const config = { fps: 10, aspectRatio: 1.777778 };
 
     isScanning = true;
     html5QrcodeScanner
@@ -36,13 +35,7 @@
       });
   }
 
-  onMount(() => {
-    inputRef.focus();
-
-    html5QrcodeScanner = new Html5Qrcode("qr-reader");
-  });
-
-  onDestroy(() => {
+  function stopScanning() {
     if (html5QrcodeScanner) {
       isScanning = false;
       html5QrcodeScanner
@@ -52,6 +45,19 @@
         })
         .catch((err) => console.error("Stop failed", err));
     }
+  }
+
+  onMount(() => {
+    inputRef.focus();
+
+    html5QrcodeScanner = new Html5Qrcode("qr-reader", {
+      useBarCodeDetectorIfSupported: true,
+      verbose: true,
+    });
+  });
+
+  onDestroy(() => {
+    stopScanning();
   });
 </script>
 
