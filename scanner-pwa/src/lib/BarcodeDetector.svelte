@@ -29,11 +29,14 @@
     } catch (error) {
       console.error("Error in startScanner()" + error);
     } finally {
-      closeFullscreen();
-      isScanning = false;
-      camaraController.stop(video, stream);
-      console.log("stopped camera");
+      stopScanning();
     }
+  }
+
+  function stopScanning() {
+    closeFullscreen();
+    isScanning = false;
+    camaraController.stop(video, stream);
   }
 
   $effect(() => {
@@ -115,15 +118,14 @@
   });
 
   onDestroy(() => {
-    camaraController.stop(video, stream);
-    cameraActive = false;
-    isScanning = false;
+    stopScanning();
   });
 </script>
 
 <div class="container" class:hidden={!isScanning} bind:this={container}>
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
+  <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
 </div>
 
 <label for="barcodeInput">Scan ID</label>
@@ -185,5 +187,23 @@
 
   .start-scanner-button {
     border: 1px solid grey;
+  }
+
+  .round {
+    border: none;
+    position: fixed;
+    margin: 15px;
+    padding: 5px;
+    font-size: 40px;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+  }
+
+  #cancel-button {
+    color: white;
+    background-color: rgb(201, 10, 10);
+    bottom: 0;
+    left: 0;
   }
 </style>

@@ -3,9 +3,11 @@
   import QrScanner from "$lib/QrScanner.svelte";
 </script>
 
-<h1>Welcome to SvelteKit</h1>
+<h1>BarcodeDetector with Ponyfill</h1>
 <div class="scanner">
-  <!---<BarcodeDetector /> --->
+  <BarcodeDetector />
+  <!---  --->
+  <h1>BarcodeDetector with Html5-qrcode</h1>
   <QrScanner />
 </div>
 
