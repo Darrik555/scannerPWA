@@ -29,7 +29,10 @@
     } catch (error) {
       console.error("Error in startScanner()" + error);
     } finally {
-      stopScanning();
+      closeFullscreen();
+      isScanning = false;
+      camaraController.stop(video, stream);
+      console.log("stopped camera");
     }
   }
 
@@ -118,7 +121,9 @@
   });
 
   onDestroy(() => {
-    stopScanning();
+    camaraController.stop(video, stream);
+    cameraActive = false;
+    isScanning = false;
   });
 </script>
 
