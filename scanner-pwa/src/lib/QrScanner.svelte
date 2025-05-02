@@ -20,7 +20,7 @@
   }
 
   function startScanning() {
-    const config = { fps: 10, aspectRatio: 1.777778 };
+    const config = { fps: 24, aspectRatio: 1.777778 };
 
     isScanning = true;
     html5QrcodeScanner
