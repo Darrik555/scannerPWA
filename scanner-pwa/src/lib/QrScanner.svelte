@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-  import { Html5Qrcode } from "html5-qrcode";
+  import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 
   let html5QrcodeScanner: Html5Qrcode;
   let inputRef: HTMLInputElement;
@@ -64,7 +64,12 @@
     inputRef.focus();
 
     html5QrcodeScanner = new Html5Qrcode("qr-reader", {
-      formatsToSupport: [0, 5, 9, 4],
+      formatsToSupport: [
+        Html5QrcodeSupportedFormats.QR_CODE,
+        Html5QrcodeSupportedFormats.CODE_93,
+        Html5QrcodeSupportedFormats.EAN_13,
+        Html5QrcodeSupportedFormats.CODE_128,
+      ],
       useBarCodeDetectorIfSupported: true,
       verbose: false,
     });
