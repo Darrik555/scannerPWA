@@ -1,4 +1,3 @@
-import type { RequestHandler } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 // DONT USE THIS CODE
 const SECRET = 'secret';
