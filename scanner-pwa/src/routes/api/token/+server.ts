@@ -10,10 +10,13 @@ const corsHeaders = {
     'Content-Type':'application/json'
 };
 
+export async function OPTIONS(){
+    return new Response(null,{
+    status:204,headers:corsHeaders
+});
+}
 
-
-
-export const actions: RequestHandler = async({url}) => {
+export async function GET({url}){
     try{
         const role = url.searchParams.get('role');
 
