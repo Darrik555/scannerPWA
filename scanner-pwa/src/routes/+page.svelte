@@ -7,14 +7,16 @@
   };
 </script>
 
+<h1>BarcodeDetector with Ponyfill</h1>
+<div class="scanner">
+  <BarcodeDetector />
+  <!---  --->
+  <h1>BarcodeDetector with Html5-qrcode</h1>
+  <QrScanner />
+</div>
+
 {#if data.role === "scanner"}
-  <h1>BarcodeDetector with Ponyfill</h1>
-  <div class="scanner">
-    <BarcodeDetector />
-    <!---  --->
-    <h1>BarcodeDetector with Html5-qrcode</h1>
-    <QrScanner />
-  </div>
+  <!---->
 {:else}
   <p>Kein Zugriff</p>
 {/if}
