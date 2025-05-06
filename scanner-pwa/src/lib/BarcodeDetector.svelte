@@ -117,7 +117,7 @@
 
   function onFullscreenChange() {
     if (document.fullscreenElement === null) {
-      closeFullscreen();
+      stopScanning();
     }
   }
 
