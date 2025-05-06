@@ -115,6 +115,10 @@
     }
   }
 
+  function onFullscreenChange() {
+    closeFullscreen();
+  }
+
   function torchToggle() {
     camaraController.toggleTorch(!isTorchOn);
     isTorchOn = !isTorchOn;
@@ -133,7 +137,12 @@
   });
 </script>
 
-<div class="container" class:hidden={!isScanning} bind:this={container}>
+<div
+  class="container"
+  class:hidden={!isScanning}
+  bind:this={container}
+  onfullscreenchange={onFullscreenChange}
+>
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
   <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
