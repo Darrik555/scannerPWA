@@ -53,7 +53,7 @@ function waitForVideoReady(video: HTMLVideoElement){
 async function getPreferredEnvironmentCameraId(){
     const devices = await navigator.mediaDevices.enumerateDevices();
     
-    const possibleBackCameraLabelKeywords = ["back","rear","main","environment"];
+    const possibleBackCameraLabelKeywords = ["0","back","rear","main","environment"];
     const notPreferredCameraLabelKeywords = ["wide","ultra"];
 
     // filters for cameras on the back of the device
