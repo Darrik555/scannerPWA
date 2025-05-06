@@ -116,7 +116,9 @@
   }
 
   function onFullscreenChange() {
-    closeFullscreen();
+    if (document.fullscreenElement !== null) {
+      closeFullscreen();
+    }
   }
 
   function torchToggle() {
