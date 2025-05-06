@@ -10,6 +10,7 @@ export async function start(videoElement: HTMLVideoElement){
     };
 
     try{
+        getPreferredEnvironmentCameraId();
         stream = await navigator.mediaDevices.getUserMedia(constraints);
         videoTrack = stream.getVideoTracks()[0];
 
@@ -36,6 +37,12 @@ function waitForVideoReady(video: HTMLVideoElement){
             video.onloadeddata = () => resolve();
         }
     });
+}
+
+async function getPreferredEnvironmentCameraId(){
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    devices.forEach((device) => console.log(`kind: ${device.kind} label: ${device.label} id: ${device.deviceId} groupid: ${device.groupId}`));
+    
 }
 
 export async function toggleTorch(isTorchOn: boolean) {
