@@ -116,7 +116,7 @@
   }
 
   function onFullscreenChange() {
-    if (document.fullscreenElement !== null) {
+    if (document.fullscreenElement === null) {
       closeFullscreen();
     }
   }
