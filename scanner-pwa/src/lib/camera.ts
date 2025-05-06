@@ -1,27 +1,31 @@
 
-let stream: MediaStream | null;
+let stream: MediaStream | null = null;
+let videoTrack: MediaStreamTrack | null = null;
 
 export async function start(videoElement: HTMLVideoElement){
     // frameRate? frameRate: { ideal: 24, max: 30 }
     const constraints = {
         audio: false,
         video: { width: 1280, height: 720, facingMode: 'environment' }
-      };
+    };
 
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    try{
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        videoTrack = stream.getVideoTracks()[0];
 
-    videoElement.srcObject = stream;
+        videoElement.srcObject = stream;
     
-    await videoElement.play();
-
-    await waitForVideoReady(videoElement);
-
-
-
-    const [track] = stream.getVideoTracks();
-    const capabilities: Partial<MediaTrackCapabilities> = track?.getCapabilities?.() ?? {};
+        await videoElement.play();
     
-    return{data: {videoElement, stream, capabilities}};
+        await waitForVideoReady(videoElement);
+
+        return{data: {videoElement, stream}};
+    }catch(e){
+        if(stream){
+            stop(videoElement, stream);
+        }
+        throw new Error("Camera could not be started: " + e);
+    }
 }
 
 function waitForVideoReady(video: HTMLVideoElement){
@@ -32,6 +36,23 @@ function waitForVideoReady(video: HTMLVideoElement){
             video.onloadeddata = () => resolve();
         }
     });
+}
+
+export async function toggleTorch(isTorchOn: boolean) {
+    
+    const capabilities: Partial<MediaTrackCapabilities> = videoTrack?.getCapabilities?.() ?? {};
+
+    // @ts-expect-error
+    if(capabilities && capabilities.torch){
+        try{
+            // @ts-expect-error
+            await videoTrack.applyConstraints({advanced: [{torch: isTorchOn}]});
+        }catch(e){
+            console.warn("Torch state could not be changed");
+        }
+    }else{
+        console.warn("Torch is not supported on this device");
+    }
 }
 
 export async function stop(videoElement: HTMLVideoElement, stream: MediaStream) {

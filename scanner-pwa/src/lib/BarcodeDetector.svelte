@@ -12,6 +12,7 @@
 
   let isScanning = $state(false);
   let cameraActive = $state(false);
+  let isTorchOn = $state(false);
   let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
@@ -114,6 +115,11 @@
     }
   }
 
+  function torchToggle() {
+    camaraController.toggleTorch(!isTorchOn);
+    isTorchOn = !isTorchOn;
+  }
+
   onMount(() => {
     isMounted = true;
 
@@ -131,6 +137,8 @@
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
   <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
+  <button class="round" id="torch-button" onclick={torchToggle}>&#x1F526</button
+  >
 </div>
 
 <label for="barcodeInput">Scan ID</label>
@@ -213,5 +221,12 @@
     background-color: rgb(201, 10, 10);
     bottom: 0;
     left: 0;
+  }
+
+  #torch-button {
+    color: white;
+    background-color: aqua;
+    bottom: 0;
+    right: 0;
   }
 </style>
