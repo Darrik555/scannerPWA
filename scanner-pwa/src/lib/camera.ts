@@ -4,7 +4,7 @@ let videoTrack: MediaStreamTrack | null = null;
 
 export async function start(videoElement: HTMLVideoElement){
 
-    //const preferredDeviceId = await getPreferredEnvironmentCameraId();
+    const preferredDeviceId = await getPreferredEnvironmentCameraId();
 
     //if(!preferredDeviceId){
     //    throw new Error("No preferred device found")
@@ -14,7 +14,7 @@ export async function start(videoElement: HTMLVideoElement){
     const constraints = {
         audio: false,
         video: { 
-           // deviceId: { ideal: preferredDeviceId},
+            deviceId: { ideal: preferredDeviceId},
             width: 1280, 
             height: 720, 
             facingMode: 'environment',
@@ -51,6 +51,7 @@ function waitForVideoReady(video: HTMLVideoElement){
 }
 
 async function getPreferredEnvironmentCameraId(){
+    await navigator.mediaDevices.getUserMedia();
     const devices = await navigator.mediaDevices.enumerateDevices();
     
     const possibleBackCameraLabelKeywords = ["0","back","rear","main","environment"];
