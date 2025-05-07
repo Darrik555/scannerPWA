@@ -6,9 +6,9 @@ export async function start(videoElement: HTMLVideoElement){
 
     const preferredDeviceId = await getPreferredEnvironmentCameraId();
 
-    if(!preferredDeviceId){
-        throw new Error("No")
-    }
+    //if(!preferredDeviceId){
+    //    throw new Error("No preferred device found")
+    //}
 
     // frameRate? frameRate: { ideal: 24, max: 30 }
     const constraints = {
