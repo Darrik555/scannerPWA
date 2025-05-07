@@ -4,17 +4,10 @@ let videoTrack: MediaStreamTrack | null = null;
 
 export async function start(videoElement: HTMLVideoElement){
 
-    const preferredDeviceId = await getPreferredEnvironmentCameraId();
-
-    //if(!preferredDeviceId){
-    //    throw new Error("No preferred device found")
-    //}
-
     // frameRate? frameRate: { ideal: 24, max: 30 }
     const constraints = {
         audio: false,
         video: { 
-            deviceId: { ideal: preferredDeviceId},
             width: 1280, 
             height: 720, 
             facingMode: 'environment',
@@ -50,6 +43,8 @@ function waitForVideoReady(video: HTMLVideoElement){
     });
 }
 
+// When multipe cameras are connected, try to pick the one that has a torch functionality 
+// permission query didnt work with this
 async function getPreferredEnvironmentCameraId(){
     await navigator.mediaDevices.getUserMedia();
     const devices = await navigator.mediaDevices.enumerateDevices();
