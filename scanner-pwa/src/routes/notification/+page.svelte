@@ -6,3 +6,5 @@
     requestNotificationPermission();
   });
 </script>
+
+<h1>Notifications</h1>
