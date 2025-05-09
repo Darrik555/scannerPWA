@@ -6,7 +6,7 @@ const subscriptions: PushSubscription[] = [];
 export const POST: RequestHandler = async({request}) => {
     try{
         const subscription = await request.json();
-        subscription.push(subscription);
+        subscriptions.push(subscription);
         return new Response(JSON.stringify({success: true}));
     }catch(e){
         console.error("Subscription error: ", e);
