@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { requestNotificationPermission } from "$lib/pushNotificationController";
 
-    import * from "$lib/pushNotificationController.ts";
+  requestNotificationPermission();
 </script>
