@@ -9,6 +9,6 @@ export const POST: RequestHandler = async({request}) => {
     return new Response('Subscription saved');
 }
 
-export function getAllSubscriptions(){
+export function _getAllSubscriptions(){
     return subscriptions;
 }

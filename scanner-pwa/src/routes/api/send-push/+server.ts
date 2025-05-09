@@ -1,6 +1,6 @@
 import type { RequestHandler } from "../token/$types";
 import webPush from 'web-push';
-import { getAllSubscriptions } from "../subscription/+server";
+import { _getAllSubscriptions } from "../subscription/+server";
 
 const private_key = process.env.PRIVATE_VAPID_KEY ?? "";
 
@@ -13,7 +13,7 @@ webPush.setVapidDetails(
 export const POST: RequestHandler = async({request}) => {
     const payload = await request.json();
 
-    const subs = getAllSubscriptions();
+    const subs = _getAllSubscriptions();
     const sendAll = subs.map((sub) => 
         webPush.sendNotification(sub, JSON.stringify(payload))
     .catch((e) => {
