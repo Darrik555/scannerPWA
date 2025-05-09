@@ -82,11 +82,13 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', event => {
+	const data = event.data.json() || {};
+	const title = data.title || 'New message';
     const options = {
-        body: 'New message received!',
+        body: data.body || 'New message received!',
         icon: '/icon192.png'
     };
     event.waitUntil(
-        self.registration.showNotification('My App', options)
+        self.registration.showNotification(title, options)
     );
 });

@@ -11,11 +11,14 @@ webPush.setVapidDetails(
 );
 
 export const POST: RequestHandler = async({request}) => {
-    const payload = await request.json();
+    const {title, message} = await request.json();
 
     const subs = _getAllSubscriptions();
     const sendAll = subs.map((sub) => 
-        webPush.sendNotification(sub, JSON.stringify(payload))
+        webPush.sendNotification(sub, JSON.stringify({
+            title: title || 'Titel',
+            body: message || 'Message Content'
+        }))
     .catch((e) => {
         console.error("Push-Error", e)
     }));
