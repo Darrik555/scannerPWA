@@ -21,7 +21,7 @@ self.addEventListener('install', (event) => {
 	event.waitUntil(addFilesToCache());
 });
 
-self.addEventListener('activate', async (event) => {
+self.addEventListener('activate', (event) => {
 	// Remove previous cached data from disk
 	async function deleteOldCaches() {
 		for (const key of await caches.keys()) {
