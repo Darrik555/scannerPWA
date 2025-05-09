@@ -1,6 +1,3 @@
-
-let registration: ServiceWorkerRegistration;
-
 function urlB64ToUint8Array(base64String: string) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
@@ -26,7 +23,6 @@ async function saveSubscription(subscription: PushSubscription) {
 
 export async function requestNotificationPermission() {
 
-
     if (!('serviceWorker' in navigator)) {
         throw new Error('No Service Worker support!');
       }
@@ -40,7 +36,7 @@ export async function requestNotificationPermission() {
     }
 
     try{
-        registration = await navigator.serviceWorker.register('./static/service-worker.js');
+        const registration = await navigator.serviceWorker.ready;
         const applicationServerKey = urlB64ToUint8Array(
             "BIuD3JFVLjCFT3WDZ3fbh7bCW-XFaNCa7woQVp8Q6rfPBoIE6JVxW2U7fkUJGMfJe8EFUlF4AuQwL63N5eJzIr8"
         );

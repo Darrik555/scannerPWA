@@ -84,7 +84,7 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('push', event => {
     const options = {
         body: 'New message received!',
-        icon: '/static/icon192.png'
+        icon: '/icon192.png'
     };
     event.waitUntil(
         self.registration.showNotification('My App', options)
