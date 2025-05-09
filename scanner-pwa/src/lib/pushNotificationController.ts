@@ -40,7 +40,7 @@ export async function requestNotificationPermission() {
         const applicationServerKey = urlB64ToUint8Array(
             "BIuD3JFVLjCFT3WDZ3fbh7bCW-XFaNCa7woQVp8Q6rfPBoIE6JVxW2U7fkUJGMfJe8EFUlF4AuQwL63N5eJzIr8"
         );
-        const options = {applicationServerKey, userVisibleOnly: true};
+        const options = {applicationServerKey: applicationServerKey, userVisibleOnly: true};
         const subscription = await registration.pushManager.subscribe(options);
         saveSubscription(subscription);
     }catch(e){

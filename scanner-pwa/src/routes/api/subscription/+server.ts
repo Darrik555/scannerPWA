@@ -6,12 +6,11 @@ const subscriptions: PushSubscription[] = [];
 export const POST: RequestHandler = async({request}) => {
     try{
         const subscription = await request.json();
-        console.log("received subscription"+ subscription + process.env.PRIVATE_VAPID_KEY);
         subscription.push(subscription);
-        return new Response('Subscription saved');
+        return new Response(JSON.stringify({success: true}));
     }catch(e){
         console.error("Subscription error: ", e);
-        return new Response("Server error");
+        return new Response(JSON.stringify({error: 'Server error'}));
     }
 }
 
