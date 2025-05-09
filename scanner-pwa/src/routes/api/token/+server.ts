@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 // DONT USE THIS CODE
-const SECRET = 'secret';
+const SECRET = process.env.JWT_SECRET ?? "";
 
 const corsHeaders = {
     'Access-Control-Allow-Origin':'*',
@@ -28,7 +28,7 @@ export async function GET({url}){
                 });
         }
     
-        const token = jwt.sign({role},SECRET,{expiresIn: '20m'})
+        const token = jwt.sign({role}, SECRET, {expiresIn: '20m'})
     
         return new Response(JSON.stringify({token}), 
         { 
