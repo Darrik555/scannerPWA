@@ -3,6 +3,8 @@
   import "leaflet/dist/leaflet.css";
   import { onMount } from "svelte";
 
+  let map: L.Map;
+
   onMount(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const userPosition = {
@@ -10,7 +12,7 @@
         longitude: position.coords.longitude,
       };
 
-      const map = L.map("map").setView(
+      map = L.map("map").setView(
         [userPosition.latitude, userPosition.longitude],
         5
       );
