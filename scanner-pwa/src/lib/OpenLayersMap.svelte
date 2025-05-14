@@ -9,12 +9,14 @@
   import { fromLonLat } from "ol/proj";
   import { Vector as VectorSource } from "ol/source";
   import { Vector as VectorLayer } from "ol/layer";
+  import { useGeographic } from "ol/proj.js";
 
   let map;
   let mapContainer: HTMLElement;
 
   onMount(async () => {
     navigator.geolocation.getCurrentPosition(async (position) => {
+      useGeographic();
       const userPosition = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -33,6 +35,7 @@
           zoom: 13,
         }),
       });
+
       const feature = new Feature(
         new Point(fromLonLat([userPosition.longitude, userPosition.latitude]))
       );
