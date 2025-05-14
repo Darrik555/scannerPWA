@@ -16,7 +16,6 @@
 
   onMount(async () => {
     navigator.geolocation.getCurrentPosition(async (position) => {
-      useGeographic();
       const userPosition = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -30,7 +29,6 @@
           }),
         ],
         view: new View({
-          projection: "EPSG:4326",
           center: fromLonLat([userPosition.longitude, userPosition.latitude]),
           zoom: 13,
         }),
