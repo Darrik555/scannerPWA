@@ -4,22 +4,40 @@
   import OSM from "ol/source/OSM.js";
   import TileLayer from "ol/layer/Tile.js";
   import View from "ol/View.js";
+  import Feature from "ol/Feature";
+  import { Point } from "ol/geom";
+  import { fromLonLat } from "ol/proj";
+  import { Vector as VectorSource } from "ol/source";
+  import { Vector as VectorLayer } from "ol/layer";
 
   let map;
   let mapContainer: HTMLElement;
 
-  onMount(() => {
-    map = new Map({
-      target: mapContainer,
-      layers: [
-        new TileLayer({
-          source: new OSM(),
+  onMount(async () => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const userPosition = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      };
+
+      map = new Map({
+        target: mapContainer,
+        layers: [
+          new TileLayer({
+            source: new OSM(),
+          }),
+        ],
+        view: new View({
+          center: [userPosition.latitude, userPosition.longitude],
+          zoom: 13,
         }),
-      ],
-      view: new View({
-        center: [0, 0],
-        zoom: 2,
-      }),
+      });
+      const feature = new Feature(
+        new Point(fromLonLat([userPosition.longitude, userPosition.latitude]))
+      );
+      const vectorSource = new VectorSource({ features: [feature] });
+      const markerVectorLayer = new VectorLayer({ source: vectorSource });
+      map.addLayer(markerVectorLayer);
     });
   });
 </script>
