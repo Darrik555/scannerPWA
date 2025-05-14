@@ -28,6 +28,7 @@
 	},
 	"dependencies": {
 		"barcode-detector": "^3.0.1",
-		"html5-qrcode": "^2.3.8"
+		"html5-qrcode": "^2.3.8",
+		"ol": "^10.5.0"
 	}
 }

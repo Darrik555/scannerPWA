@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LeafletMap from "$lib/LeafletMap.svelte";
+  import OSM from "$lib/OpenLayersMap.svelte";
 </script>
 
-<LeafletMap />
+<OSM />
