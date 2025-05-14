@@ -28,7 +28,7 @@
           }),
         ],
         view: new View({
-          center: [userPosition.latitude, userPosition.longitude],
+          center: fromLonLat([userPosition.longitude, userPosition.latitude]),
           zoom: 13,
         }),
       });
