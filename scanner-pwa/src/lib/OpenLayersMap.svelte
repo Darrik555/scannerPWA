@@ -28,6 +28,7 @@
           }),
         ],
         view: new View({
+          projection: "EPSG:4326",
           center: fromLonLat([userPosition.longitude, userPosition.latitude]),
           zoom: 13,
         }),
