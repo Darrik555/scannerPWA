@@ -10,7 +10,7 @@
     try {
       const targetCoords: [number, number] = [6.955838, 50.936693];
 
-      map = createMap(mapContainer, [0, 0]);
+      map = createMap(mapContainer, targetCoords);
 
       navigator.geolocation.getCurrentPosition(
         async (position) => {
