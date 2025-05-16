@@ -1,5 +1,5 @@
 <script lang="ts">
-  import OSM from "$lib/OpenLayersMap.svelte";
+  import OSM from "./OpenLayersMap.svelte";
 </script>
 
 <OSM />
