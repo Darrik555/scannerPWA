@@ -15,8 +15,8 @@
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const currentPosition: [number, number] = [
-            position.coords.latitude,
             position.coords.longitude,
+            position.coords.latitude,
           ];
           addFeaturesToMap(map, currentPosition, targetCoords);
         },
