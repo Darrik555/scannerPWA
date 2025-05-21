@@ -11,10 +11,12 @@
   let isScanning = $state(false);
   let isTorchOn = $state(false);
   let barcodeValue: string = $state("");
+  let hasTorch = $state(true);
 
   async function startScanning() {
     try {
       stream = await camaraController.start(video);
+      hasTorch = camaraController.hasTorchCapability();
       isScanning = true;
       openFullscreen();
 
@@ -103,7 +105,7 @@
   <button
     class="round"
     id="torch-button"
-    class:hidden={!camaraController.hasTorchCapability}
+    class:hidden={!hasTorch}
     onclick={torchToggle}>&#x1F526</button
   >
 </div>
