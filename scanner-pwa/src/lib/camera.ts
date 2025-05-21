@@ -12,7 +12,7 @@ export async function start(videoElement: HTMLVideoElement){
         const constraints = {
             audio: false,
             video: { 
-                deviceId: preferredCameraDeviceId,
+                deviceId: {exact: preferredCameraDeviceId},
                 width: 1280, 
                 height: 720, 
                 facingMode: 'environment',

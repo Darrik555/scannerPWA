@@ -5,7 +5,6 @@
 
   let video: HTMLVideoElement;
   let stream: MediaStream;
-  let boundingBoxLayer: HTMLCanvasElement;
   let inputRef: HTMLInputElement;
   let container: HTMLDivElement;
 
