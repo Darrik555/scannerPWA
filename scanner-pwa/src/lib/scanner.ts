@@ -1,4 +1,3 @@
-
 import { BarcodeDetector as BarcodePonyfill, type BarcodeFormat, type DetectedBarcode } from "barcode-detector/ponyfill";
 
 declare global {
@@ -15,27 +14,26 @@ let barcodeDetector: BarcodePonyfill;
 
 // check compatibility
 async function createBarcodeDetector() {
+    if(!barcodeDetector == undefined) return;
+
     if (window.BarcodeDetector == undefined) {
         console.log("Native Barcode Detector is not supported by this browser. Use ponyfill");  
-        return new BarcodePonyfill(format); 
+        barcodeDetector = new BarcodePonyfill(format); 
+    }else{
+        const allSupportedFormats = await window.BarcodeDetector.getSupportedFormats();
+        const unsupportedFormats = format.formats.filter((format) => !allSupportedFormats.includes(format));
+        if(unsupportedFormats.length > 0){
+            console.log("At least one barcode format not supported")
+            barcodeDetector = new BarcodePonyfill(format); 
+        }
+        
+        console.log("Use Native Barcode Detector");
+        barcodeDetector = new window.BarcodeDetector(format);
     }
-
-    const allSupportedFormats = await window.BarcodeDetector.getSupportedFormats();
-    const unsupportedFormats = format.formats.filter((format) => !allSupportedFormats.includes(format));
-    if(unsupportedFormats.length > 0){
-        console.log("At least one barcode format not supported")
-        return new BarcodePonyfill(format); 
-    }
-    
-    console.log("Use Native Barcode Detector");
-    return new window.BarcodeDetector(format);
 }
 
-type DrawHandler = (barcodes: DetectedBarcode[]) => void;
-
 export async function scanBarcode(video: HTMLVideoElement) {
-    console.log(barcodeDetector);
-    barcodeDetector = await createBarcodeDetector();
+    await createBarcodeDetector();
 
     return new Promise<string | null>((resolve,reject) => {
         const barcodeFrame = (then: number) => async (now: number) =>  {
@@ -66,9 +64,11 @@ export async function scanBarcode(video: HTMLVideoElement) {
     
 }
                
-    
+
+type DrawHandler = (barcodes: DetectedBarcode[]) => void;
+
 export async function continuousBarcodeScanning(video: HTMLVideoElement, drawHandler:  DrawHandler){
-    barcodeDetector = await createBarcodeDetector();
+    await createBarcodeDetector();
 
     const barcodeFrame = (then: number) => async (now: number) =>  {
         console.log("time diff "+ (now - then));
