@@ -34,10 +34,6 @@ async function createBarcodeDetector() {
 
 export async function scanBarcode(video: HTMLVideoElement) {
     await createBarcodeDetector();
-   
-    while(video.readyState === 0){
-        await new Promise(r => window.requestAnimationFrame(r));
-    }
     
     try{
         const detectedBarcodes = await barcodeDetector.detect(video);
