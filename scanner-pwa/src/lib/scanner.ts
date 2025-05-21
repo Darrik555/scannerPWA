@@ -35,12 +35,13 @@ async function createBarcodeDetector() {
 export async function scanBarcode(video: HTMLVideoElement) {
     await createBarcodeDetector();
 
+    return new Promise<string | null>((resolve,reject) => {
     const scan = async () => { 
         try{
             if(video.readyState !== 0){
                 const detectedBarcodes = await barcodeDetector.detect(video);
                 if (detectedBarcodes.length > 0){
-                    return detectedBarcodes[0].rawValue;
+                    resolve(detectedBarcodes[0].rawValue);
                 }    
             }        
         }catch(error){
@@ -50,6 +51,8 @@ export async function scanBarcode(video: HTMLVideoElement) {
         requestAnimationFrame(scan);
     };
     scan();
+    }
+);
 }
                
 
