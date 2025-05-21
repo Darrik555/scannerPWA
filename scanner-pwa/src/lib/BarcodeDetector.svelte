@@ -56,20 +56,22 @@
   }
 
   function closeFullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-      // @ts-expect-error}
-    } else if (document.mozCancelFullScreen) {
-      // @ts-expect-error
-      document.mozCancelFullScreen();
-      // @ts-expect-error
-    } else if (document.webkitExitFullscreen) {
-      // @ts-expect-error
-      document.webkitExitFullscreen();
-      // @ts-expect-error
-    } else if (document.msExitFullscreen) {
-      // @ts-expect-error
-      document.msExitFullscreen();
+    if (document.fullscreenElement?.nodeName === "DIV") {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        // @ts-expect-error}
+      } else if (document.mozCancelFullScreen) {
+        // @ts-expect-error
+        document.mozCancelFullScreen();
+        // @ts-expect-error
+      } else if (document.webkitExitFullscreen) {
+        // @ts-expect-error
+        document.webkitExitFullscreen();
+        // @ts-expect-error
+      } else if (document.msExitFullscreen) {
+        // @ts-expect-error
+        document.msExitFullscreen();
+      }
     }
   }
 
