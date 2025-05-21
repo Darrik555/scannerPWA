@@ -48,40 +48,28 @@ function waitForVideoReady(video: HTMLVideoElement){
 }
 
 // When multipe cameras are connected, try to pick the one that has a torch functionality 
-// permission query didnt work with this
 async function getPreferredEnvironmentCameraId(){
-    try{
-        await navigator.mediaDevices.getUserMedia();
+    try{   
         const devices = await navigator.mediaDevices.enumerateDevices();
         
         const possibleBackCameraLabelKeywords = ["0","back","rear","main","environment"];
         const notPreferredCameraLabelKeywords = ["wide","ultra"];
     
-        // filters for cameras on the back of the device
-        const filterdVideoDevices = devices.filter((device) => 
-            device.kind === "videoinput" && 
-            possibleBackCameraLabelKeywords.some((keyword) => 
-                device.label.toLowerCase().includes(keyword.toLowerCase())
-            )
-        );
-        
-        // filters for not wide angle cameras
-        const preferred = filterdVideoDevices.find((device) => !notPreferredCameraLabelKeywords.some((keyword) => 
-            device.label.toLowerCase().includes(keyword)
-        ));
-    
-        return (preferred ?? filterdVideoDevices[0]).deviceId ?? null;
+        // filters for camera with '0' in label, which seems to be the rear camera with torch capability
+        return devices.reverse().find((device) => device.label.includes("0"))?.deviceId;
     }catch(err){
         console.error("Preferred Camera could not be identified: " + err);
     }
 }
 
-export async function toggleTorch(isTorchOn: boolean) {
-    
+function hasTorchCapability(){
     const capabilities: Partial<MediaTrackCapabilities> = videoTrack?.getCapabilities?.() ?? {};
-
     // @ts-expect-error
-    if(capabilities && capabilities.torch){
+    return (capabilities && capabilities.torch);
+}
+
+export async function toggleTorch(isTorchOn: boolean) {
+    if(hasTorchCapability()){
         try{
             // @ts-expect-error
             await videoTrack.applyConstraints({advanced: [{torch: isTorchOn}]});
