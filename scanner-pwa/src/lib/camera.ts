@@ -1,20 +1,24 @@
 
 let stream: MediaStream | null = null;
 let videoTrack: MediaStreamTrack | null = null;
+    
+
 
 export async function start(videoElement: HTMLVideoElement){
-
-    // frameRate? frameRate: { ideal: 24, max: 30 }
-    const constraints = {
-        audio: false,
-        video: { 
-            width: 1280, 
-            height: 720, 
-            facingMode: 'environment',
-        }
-    };
-
     try{
+        const preferredCameraDeviceId = await getPreferredEnvironmentCameraId();
+
+        // frameRate? frameRate: { ideal: 24, max: 30 }
+        const constraints = {
+            audio: false,
+            video: { 
+                deviceId: preferredCameraDeviceId,
+                width: 1280, 
+                height: 720, 
+                facingMode: 'environment',
+            }
+        };
+
         stream = await navigator.mediaDevices.getUserMedia(constraints);
         videoTrack = stream.getVideoTracks()[0];
 
@@ -46,26 +50,30 @@ function waitForVideoReady(video: HTMLVideoElement){
 // When multipe cameras are connected, try to pick the one that has a torch functionality 
 // permission query didnt work with this
 async function getPreferredEnvironmentCameraId(){
-    await navigator.mediaDevices.getUserMedia();
-    const devices = await navigator.mediaDevices.enumerateDevices();
+    try{
+        await navigator.mediaDevices.getUserMedia();
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        
+        const possibleBackCameraLabelKeywords = ["0","back","rear","main","environment"];
+        const notPreferredCameraLabelKeywords = ["wide","ultra"];
     
-    const possibleBackCameraLabelKeywords = ["0","back","rear","main","environment"];
-    const notPreferredCameraLabelKeywords = ["wide","ultra"];
-
-    // filters for cameras on the back of the device
-    const filterdVideoDevices = devices.filter((device) => 
-        device.kind === "videoinput" && 
-        possibleBackCameraLabelKeywords.some((keyword) => 
-            device.label.toLowerCase().includes(keyword.toLowerCase())
-        )
-    );
+        // filters for cameras on the back of the device
+        const filterdVideoDevices = devices.filter((device) => 
+            device.kind === "videoinput" && 
+            possibleBackCameraLabelKeywords.some((keyword) => 
+                device.label.toLowerCase().includes(keyword.toLowerCase())
+            )
+        );
+        
+        // filters for not wide angle cameras
+        const preferred = filterdVideoDevices.find((device) => !notPreferredCameraLabelKeywords.some((keyword) => 
+            device.label.toLowerCase().includes(keyword)
+        ));
     
-    // filters for not wide angle cameras
-    const preferred = filterdVideoDevices.find((device) => !notPreferredCameraLabelKeywords.some((keyword) => 
-        device.label.toLowerCase().includes(keyword)
-    ));
-
-    return (preferred ?? filterdVideoDevices[0]).deviceId ?? null;
+        return (preferred ?? filterdVideoDevices[0]).deviceId ?? null;
+    }catch(err){
+        console.error("Preferred Camera could not be identified: " + err);
+    }
 }
 
 export async function toggleTorch(isTorchOn: boolean) {
