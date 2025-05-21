@@ -1,5 +1,4 @@
 import { BarcodeDetector as BarcodePonyfill, type BarcodeFormat, type DetectedBarcode } from "barcode-detector/ponyfill";
-import { V } from "ol/renderer/webgl/FlowLayer";
 
 declare global {
     interface Window {
@@ -35,23 +34,36 @@ async function createBarcodeDetector() {
 
 export async function scanBarcode(video: HTMLVideoElement) {
     await createBarcodeDetector();
+
+    return new Promise<string | null>((resolve,reject) => {
+        const barcodeFrame = (then: number) => async (now: number) =>  {
+            if(video.readyState !== 0){
+                try{
+                    if(now - then > 1000 / 25){
+                        const detectedBarcodes = await barcodeDetector.detect(video);
+            
+                        if (detectedBarcodes.length > 0){
+                            resolve(detectedBarcodes[0].rawValue);
+                            return;
+                        }
+                        window.requestAnimationFrame(barcodeFrame(now));
+                    }else{
+                        window.requestAnimationFrame(barcodeFrame(then));
+                    }
+                }catch(error){
+                    console.error('Error on Scanning', error);
+                    reject(error);
+                    return;
+                }
+            }else{
+                window.requestAnimationFrame(barcodeFrame(now));
+            }   
+        }
+        barcodeFrame(window.performance.now())(window.performance.now());
+    })
     
-    const scan = async () => {
-        if(video.readyState !== 0){
-            try{  
-                const detectedBarcodes = await barcodeDetector.detect(video);
-    
-                if (detectedBarcodes.length > 0){
-                    return detectedBarcodes[0].rawValue;
-                }               
-            }catch(error){
-                console.error('Error on Scanning', error);
-            }
-        }else{
-            window.requestAnimationFrame(scan);
-        } 
-    }
-}             
+}
+               
 
 type DrawHandler = (barcodes: DetectedBarcode[]) => void;
 
