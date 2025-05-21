@@ -7,13 +7,11 @@ declare global {
     }
 }
 
-let barcodeDetector: BarcodePonyfill;
-
-let stream: MediaStream | null;
-let scanning = false;
 const format = {
-        formats: ["qr_code", "code_128", "ean_13","code_93"] as BarcodeFormat[]
+        formats: ["qr_code", "code_128", "code_39","data_matrix"] as BarcodeFormat[]
 };
+
+let barcodeDetector: BarcodePonyfill;
 
 // check compatibility
 async function createBarcodeDetector() {
@@ -36,6 +34,7 @@ async function createBarcodeDetector() {
 type DrawHandler = (barcodes: DetectedBarcode[]) => void;
 
 export async function scanBarcode(video: HTMLVideoElement) {
+    console.log(barcodeDetector);
     barcodeDetector = await createBarcodeDetector();
 
     return new Promise<string | null>((resolve,reject) => {
