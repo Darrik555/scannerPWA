@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { type DetectedBarcode } from "barcode-detector/ponyfill";
-  import { continuousBarcodeScanning, scanBarcode } from "$lib/scanner";
+  import { scanBarcode } from "$lib/scanner";
   import { onDestroy, onMount } from "svelte";
   import * as camaraController from "$lib/camera";
 
@@ -11,29 +10,21 @@
   let container: HTMLDivElement;
 
   let isScanning = $state(false);
-  let cameraActive = $state(false);
   let isTorchOn = $state(false);
-  let isMounted = $state(false);
   let barcodeValue: string = $state("");
 
   async function startScanning() {
     try {
-      const result = await camaraController.start(video);
-      stream = result.data.stream;
+      stream = await camaraController.start(video);
       isScanning = true;
-      //cameraActive = true;
       openFullscreen();
-      console.log("started camera");
 
-      const barcode = await scanBarcode(video, drawBoundingBox);
+      const barcode = await scanBarcode(video);
       barcodeValue = barcode ?? "";
     } catch (error) {
       console.error("Error in startScanner()" + error);
     } finally {
-      closeFullscreen();
-      isScanning = false;
-      camaraController.stop(video, stream);
-      console.log("stopped camera");
+      stopScanning();
     }
   }
 
@@ -41,40 +32,6 @@
     closeFullscreen();
     isScanning = false;
     camaraController.stop(video, stream);
-  }
-
-  $effect(() => {
-    if (cameraActive) {
-      continuousBarcodeScanning(video, drawBoundingBox).then((response) => {
-        console.log(response);
-      });
-    }
-  });
-
-  function clearCanvas(canvas: HTMLCanvasElement) {
-    const ctx = canvas.getContext("2d");
-    if (ctx !== null) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  }
-
-  function drawBoundingBox(detectedCodes: DetectedBarcode[]) {
-    boundingBoxLayer.width = video.videoWidth;
-    boundingBoxLayer.height = video.videoHeight;
-    const ctx = boundingBoxLayer.getContext("2d") as CanvasRenderingContext2D;
-
-    clearCanvas(boundingBoxLayer);
-
-    for (const detectedCode of detectedCodes) {
-      const {
-        boundingBox: { x, y, width, height },
-      } = detectedCode;
-
-      console.log(x, y, width, height);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "red";
-      ctx.strokeRect(x, y, width, height);
-    }
   }
 
   function openFullscreen() {
@@ -127,14 +84,11 @@
   }
 
   onMount(() => {
-    isMounted = true;
-
     inputRef.focus();
   });
 
   onDestroy(() => {
     camaraController.stop(video, stream);
-    cameraActive = false;
     isScanning = false;
   });
 </script>
@@ -146,7 +100,6 @@
   onfullscreenchange={onFullscreenChange}
 >
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
-  <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
   <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
   <button
     class="round"
@@ -193,14 +146,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
   }
 
   .hidden {

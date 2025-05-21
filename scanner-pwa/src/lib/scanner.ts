@@ -35,7 +35,7 @@ async function createBarcodeDetector() {
 
 type DrawHandler = (barcodes: DetectedBarcode[]) => void;
 
-export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHandler ) {
+export async function scanBarcode(video: HTMLVideoElement) {
     barcodeDetector = await createBarcodeDetector();
 
     return new Promise<string | null>((resolve,reject) => {
@@ -46,11 +46,6 @@ export async function scanBarcode(video: HTMLVideoElement, drawHandler:  DrawHan
                         const detectedBarcodes = await barcodeDetector.detect(video);
             
                         if (detectedBarcodes.length > 0){
-                            console.log("first format "+detectedBarcodes[0].format)
-                            detectedBarcodes.forEach(element => {
-                                console.log("Value " + element.rawValue);    
-                            });
-                            drawHandler(detectedBarcodes);
                             resolve(detectedBarcodes[0].rawValue);
                             return;
                         }
