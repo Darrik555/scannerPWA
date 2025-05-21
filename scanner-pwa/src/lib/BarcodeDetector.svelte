@@ -148,7 +148,11 @@
   <video class="camera" bind:this={video} muted autoplay playsinline></video>
   <canvas class="overlay" bind:this={boundingBoxLayer}> </canvas>
   <button class="round" id="cancel-button" onclick={stopScanning}>X</button>
-  <button class="round" id="torch-button" onclick={torchToggle}>&#x1F526</button
+  <button
+    class="round"
+    id="torch-button"
+    class:hidden={!camaraController.hasTorchCapability}
+    onclick={torchToggle}>&#x1F526</button
   >
 </div>
 

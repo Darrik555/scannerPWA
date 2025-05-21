@@ -28,7 +28,7 @@ export async function start(videoElement: HTMLVideoElement){
     
         await waitForVideoReady(videoElement);
 
-        return{data: {videoElement, stream}};
+        return stream;
     }catch(e){
         if(stream){
             stop(videoElement, stream);
@@ -62,7 +62,7 @@ async function getPreferredEnvironmentCameraId(){
     }
 }
 
-function hasTorchCapability(){
+export function hasTorchCapability(){
     const capabilities: Partial<MediaTrackCapabilities> = videoTrack?.getCapabilities?.() ?? {};
     // @ts-expect-error
     return (capabilities && capabilities.torch);
