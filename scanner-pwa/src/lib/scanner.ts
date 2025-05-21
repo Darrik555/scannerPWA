@@ -36,14 +36,17 @@ export async function scanBarcode(video: HTMLVideoElement) {
     await createBarcodeDetector();
     console.log(barcodeDetector);
     const scan = async () => {
-        try{
-            const detectedBarcodes = await barcodeDetector.detect(video);
-            if (detectedBarcodes.length > 0){
-                  return detectedBarcodes[0].rawValue;
-            }            
-        }catch(error){
-            console.error('Error on Scanning', error);
-        } 
+        if(video.readyState !== 0){
+            try{
+                const detectedBarcodes = await barcodeDetector.detect(video);
+                if (detectedBarcodes.length > 0){
+                      return detectedBarcodes[0].rawValue;
+                }            
+            }catch(error){
+                console.error('Error on Scanning', error);
+            } 
+        }
+        
         requestAnimationFrame(scan);
     };
     scan();
