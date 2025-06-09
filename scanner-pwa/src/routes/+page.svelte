@@ -18,7 +18,7 @@
 {#if data.role === "scanner"}
   <!---->
 {:else}
-  <p>Kein Zugriff</p>
+  <p>Kein Zugriff!</p>
 {/if}
 
 <style>
