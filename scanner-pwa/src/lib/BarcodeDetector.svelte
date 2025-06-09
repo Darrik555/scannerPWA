@@ -30,6 +30,9 @@
   }
 
   function stopScanning() {
+    if (isTorchOn) {
+      torchToggle();
+    }
     closeFullscreen();
     isScanning = false;
     camaraController.stop(video, stream);
