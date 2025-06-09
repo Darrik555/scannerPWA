@@ -1,8 +1,6 @@
 
 let stream: MediaStream | null = null;
 let videoTrack: MediaStreamTrack | null = null;
-    
-
 
 export async function start(videoElement: HTMLVideoElement){
     try{
@@ -83,18 +81,16 @@ export async function toggleTorch(isTorchOn: boolean) {
 
 export async function stop(videoElement: HTMLVideoElement, stream: MediaStream) {
 
-    if(videoElement.src !== undefined){
+    if(videoElement !== undefined){
         videoElement.src = '';
+        videoElement.srcObject = null; 
     }
 
-	if(videoElement.srcObject !== null){
-        videoElement.srcObject = null;  
+    if(stream !== undefined){
+        stream.getTracks().forEach(track => 
+            {
+                stream.removeTrack(track);
+                track.stop();
+            });
     }
-	
-
-    stream.getTracks().forEach(track => 
-        {
-            stream.removeTrack(track);
-            track.stop();
-        });
 }
