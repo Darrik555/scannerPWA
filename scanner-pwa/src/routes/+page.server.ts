@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+/*import jwt from 'jsonwebtoken';
 import type { PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ url }) => {
@@ -14,3 +14,5 @@ export const load: PageServerLoad = async ({ url }) => {
         return {role: null};
     }
 }
+
+*/
