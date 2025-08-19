@@ -13,19 +13,30 @@
   let barcodeValue: string = $state("");
   let hasTorch = $state(true);
 
+  let timeScan = 0;
+  let timeAll = 0;
+
   async function startScanning() {
+    let startTimeAll = performance.now();
     try {
       stream = await camaraController.start(video);
       hasTorch = camaraController.hasTorchCapability();
       isScanning = true;
       openFullscreen();
 
+      let startTimeScanning = performance.now();
       const barcode = await scanBarcode(video);
+      let endTimeScanning = performance.now();
+      timeScan = endTimeScanning - startTimeScanning;
+
       barcodeValue = barcode ?? "";
     } catch (error) {
       console.error("Error in startScanner()" + error);
     } finally {
       stopScanning();
+
+      let endTimeAll = performance.now();
+      timeAll = endTimeAll - startTimeAll;
     }
   }
 
@@ -128,6 +139,8 @@
     >Start</button
   >
 </div>
+<p>Scan: {timeScan} ms</p>
+<p>Cam start to close {timeAll} ms</p>
 
 <style>
   .scanning-flexbox {
