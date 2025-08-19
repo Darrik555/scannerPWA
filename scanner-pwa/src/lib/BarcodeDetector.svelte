@@ -13,8 +13,8 @@
   let barcodeValue: string = $state("");
   let hasTorch = $state(true);
 
-  let timeScan = 0;
-  let timeAll = 0;
+  let timeScan = $state(0);
+  let timeAll = $state(0);
 
   async function startScanning() {
     let startTimeAll = performance.now();

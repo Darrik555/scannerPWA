@@ -10,9 +10,15 @@
   let isTorchOn = $state(false);
   let barcodeValue: string = $state("");
 
+  let timeScan = $state(0);
+  let startTimeScanning = 0;
+  let endTimeScanning = 0;
+
   function onScanSuccess(decodedText: string, decodedResult: any) {
     barcodeValue = decodedText;
     stopScanning();
+    endTimeScanning = performance.now();
+    timeScan = endTimeScanning - startTimeScanning;
   }
 
   function onScanFailure(error: any) {
@@ -21,14 +27,14 @@
 
   function startScanning() {
     const config = { fps: 24, aspectRatio: 1.777778 };
-
+    startTimeScanning = performance.now();
     isScanning = true;
     html5QrcodeScanner
       .start(
         { facingMode: "environment" },
         config,
         onScanSuccess,
-        onScanFailure
+        onScanFailure,
       )
       .catch((err) => {
         isScanning = false;
@@ -100,6 +106,7 @@
     >Start</button
   >
 </div>
+<p>Scan: {timeScan} ms</p>
 
 <style>
   .scanning-flexbox {
