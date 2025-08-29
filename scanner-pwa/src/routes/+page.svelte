@@ -7,12 +7,6 @@
   };
 </script>
 
-<nav>
-  <a href="/">scanner</a>
-  <a href="/notification">notification</a>
-  <a href="/map">map</a>
-</nav>
-
 <h1>BarcodeDetector with Ponyfill</h1>
 <div class="scanner">
   <BarcodeDetector />
