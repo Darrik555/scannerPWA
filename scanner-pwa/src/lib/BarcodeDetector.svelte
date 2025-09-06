@@ -27,7 +27,6 @@
       let startTimeScanning = performance.now();
       const barcode = await scanBarcode(video);
       let endTimeScanning = performance.now();
-      //time
       timeScan = endTimeScanning - startTimeScanning;
 
       barcodeValue = barcode ?? "";
