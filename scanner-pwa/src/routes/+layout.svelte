@@ -11,6 +11,12 @@
   {@html webManifest}
 </svelte:head>
 
+<nav>
+  <a href="/">scanner</a>
+  <a href="/notification">notification</a>
+  <a href="/map">map</a>
+</nav>
+
 <main>
   {@render children()}
 </main>
