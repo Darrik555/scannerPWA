@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { requestNotificationPermission } from "$lib/pushNotificationController";
+  import { requestNotificationPermission } from "./pushNotificationController";
   import { onMount } from "svelte";
 
   onMount(() => {
